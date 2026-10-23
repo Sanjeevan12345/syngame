@@ -1,0 +1,15 @@
+# Godot 4+ specific ignores
+.godot/
+
+# Godot 3 specific ignores
+.import/
+export_preset.cfg
+
+# Shared ignores
+mono_crash_release_trigger
+*.translation
+
+# Mono/C# specific ignores
+.mono/
+data_*/
+mono_crash_release_trigger
