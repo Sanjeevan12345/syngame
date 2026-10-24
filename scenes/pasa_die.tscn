@@ -1,0 +1,62 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/pasa_die.gd" id="1_pasa"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_pasa"]
+friction = 0.4
+bounce = 0.3
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pasa"]
+size = Vector3(0.6, 0.6, 3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
+albedo_color = Color(0.5, 0.5, 0.5, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pasa"]
+material = SubResource("StandardMaterial3D_body")
+size = Vector3(0.6, 0.6, 3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pip"]
+albedo_color = Color(1, 1, 1, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_pip"]
+material = SubResource("StandardMaterial3D_pip")
+top_radius = 0.09
+bottom_radius = 0.09
+height = 0.02
+
+[node name="PasaDie" type="RigidBody3D"]
+physics_material_override = SubResource("PhysicsMaterial_pasa")
+script = ExtResource("1_pasa")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_pasa")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_pasa")
+
+[node name="Pips" type="Node3D" parent="."]
+
+[node name="Face1_Pip1" type="MeshInstance3D" parent="Pips"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0.305, 0, 0)
+mesh = SubResource("CylinderMesh_pip")
+
+[node name="Face2_Pip1" type="MeshInstance3D" parent="Pips"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.305, -0.6)
+mesh = SubResource("CylinderMesh_pip")
+
+[node name="Face2_Pip2" type="MeshInstance3D" parent="Pips"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.305, 0.6)
+mesh = SubResource("CylinderMesh_pip")
+
+[node name="Face3_Pip1" type="MeshInstance3D" parent="Pips"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, -0.305, 0, -0.8)
+mesh = SubResource("CylinderMesh_pip")
+
+[node name="Face3_Pip2" type="MeshInstance3D" parent="Pips"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, -0.305, 0, 0)
+mesh = SubResource("CylinderMesh_pip")
+
+[node name="Face3_Pip3" type="MeshInstance3D" parent="Pips"]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, -0.305, 0, 0.8)
+mesh = SubResource("CylinderMesh_pip")

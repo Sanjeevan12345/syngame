@@ -1,30 +1,224 @@
 extends Node2D
 class_name Pawn
 
+# Where the pawn is on its journey to Vaikuntha
+enum PathState { OUTER, LUDO, HOME_STRETCH, VAIKUNTHA }
+
+# What a pawn does when it is back at its entry tip after a full Ludo lap
+enum LapRoute { UNDECIDED, HOME, LOOP_AGAIN, EXIT }
+
+# Tiles in one full lap of the inner Ludo track
+const LUDO_CIRCUIT_LENGTH: int = 72
+
+# Pawns shrink on the inner board, where tiles are much closer together
+const OUTER_SCALE: float = 0.2
+const INNER_SCALE: float = 0.1
+
 @export var owner_id: int = 0
+@export var pawn_index: int = 0 # Which of the owner's 3 pawns this is (0-2)
 var current_node: BoardNode = null
 
+var path_state: PathState = PathState.OUTER
+var entry_node: BoardNode = null # Ludo arm tip this pawn entered on; also its home junction
+var entry_gate: BoardNode = null # Outer-ring gate the pawn came in through; its exit back out
+var lap_route: LapRoute = LapRoute.UNDECIDED
+var ludo_steps: int = 0          # Ludo track tiles moved since entering
+var divert_at_gate: bool = false # Next step leaves the outer ring through the current gate
+
+# Small per-pawn shift so pawns sharing a tile don't hide each other
+var visual_offset: Vector2 = Vector2.ZERO
+
 signal movement_finished(pawn: Pawn)
+signal step_finished(pawn: Pawn, node: BoardNode) # Fired on every tile passed or landed on
 
 # Call this on setup to place the pawn on the starting tile without animating
 func set_initial_node(node: BoardNode):
 	current_node = node
-	global_position = node.global_position
+	scale = get_board_scale()
+	global_position = node.global_position + get_board_offset()
 
-# Moves the pawn step-by-step along the Monopoly perimeter loop
-func move_steps(steps: int):
+func is_on_inner_board() -> bool:
+	return path_state != PathState.OUTER
+
+func get_board_scale() -> Vector2:
+	return Vector2.ONE * (INNER_SCALE if is_on_inner_board() else OUTER_SCALE)
+
+# Shared-tile offset, scaled down with the pawn on the inner board
+func get_board_offset() -> Vector2:
+	return visual_offset * (INNER_SCALE / OUTER_SCALE if is_on_inner_board() else 1.0)
+
+# Sends a captured pawn back to Start; it has to re-enter through a gate
+func reset_to_start(start_node: BoardNode):
+	path_state = PathState.OUTER
+	entry_node = null
+	entry_gate = null
+	ludo_steps = 0
+	lap_route = LapRoute.UNDECIDED
+	divert_at_gate = false
+	set_initial_node(start_node)
+
+@onready var sprite: Sprite2D = $Sprite2D
+var pulse_tween: Tween = null
+
+# Pulses the pawn while it can be clicked to move
+func set_selectable(selectable: bool):
+	if pulse_tween:
+		pulse_tween.kill()
+		pulse_tween = null
+	sprite.scale = Vector2(0.5, 0.5)
+
+	if selectable:
+		pulse_tween = create_tween().set_loops()
+		pulse_tween.tween_property(sprite, "scale", Vector2(0.6, 0.6), 0.4)
+		pulse_tween.tween_property(sprite, "scale", Vector2(0.5, 0.5), 0.4)
+
+# True if a global (board) position falls on this pawn's sprite
+func contains_point(global_point: Vector2) -> bool:
+	return sprite.get_rect().has_point(sprite.to_local(global_point))
+
+func is_on_gate() -> bool:
+	return path_state == PathState.OUTER \
+		and current_node.tile_type == BoardNode.TileType.ENTRY_GATE \
+		and current_node.branch_ludo_node != null
+
+# Picks the tile this pawn moves to next, following its path state
+func get_next_node() -> BoardNode:
+	match path_state:
+		PathState.OUTER:
+			if divert_at_gate:
+				return current_node.branch_ludo_node
+		PathState.LUDO:
+			# At the junction after a full lap: turn home or leave through the entry gate
+			if is_at_lap_junction():
+				match lap_route:
+					LapRoute.HOME:
+						return entry_node.home_stretch_node
+					LapRoute.EXIT:
+						return entry_gate
+		PathState.VAIKUNTHA:
+			return null
+	return current_node.next_node
+
+# True when the pawn is back on its entry tip having completed a full lap
+func is_at_lap_junction() -> bool:
+	return path_state == PathState.LUDO and current_node == entry_node \
+		and ludo_steps >= LUDO_CIRCUIT_LENGTH
+
+# True when the pawn stopped on an arm tip it may leave through. A pawn can't exit
+# through the gate it just came in by until it has moved; lap completions at the
+# entry tip are handled by the lap prompt instead.
+func can_exit_here() -> bool:
+	if path_state != PathState.LUDO or current_node.exit_gate_node == null:
+		return false
+	if current_node == entry_node and ludo_steps == 0:
+		return false
+	return not is_at_lap_junction()
+
+# Tiles from a node to Vaikuntha along a Home Stretch, counting the Vaikuntha tile itself
+func count_steps_to_vaikuntha(from: BoardNode) -> int:
+	var steps = 0
+	var node = from
+	while node != null and node.tile_type != BoardNode.TileType.THRONE:
+		node = node.next_node
+		steps += 1
+	return steps
+
+# Exact steps this pawn needs to land on Vaikuntha, or -1 if it isn't heading
+# there (outer ring, exiting, or a lap that won't qualify for the Home Stretch).
+# qualified: whether the owner currently meets the Home Stretch requirements.
+func distance_to_vaikuntha(qualified: bool) -> int:
+	match path_state:
+		PathState.VAIKUNTHA:
+			return 0
+		PathState.HOME_STRETCH:
+			return count_steps_to_vaikuntha(current_node)
+		PathState.LUDO:
+			var home_length = 1 + count_steps_to_vaikuntha(entry_node.home_stretch_node)
+			if is_at_lap_junction():
+				return home_length if lap_route == LapRoute.HOME else -1
+			if qualified:
+				return (LUDO_CIRCUIT_LENGTH - ludo_steps) + home_length
+	return -1
+
+# A pawn can't move once in Vaikuntha, and must roll exactly what's needed to reach it
+func can_move(steps: int, qualified: bool) -> bool:
+	if path_state == PathState.VAIKUNTHA:
+		return false
+	var distance = distance_to_vaikuntha(qualified)
+	return distance < 0 or steps <= distance
+
+# Moves one tile and updates the path state for the tile entered
+func step_to(node: BoardNode):
+	match path_state:
+		PathState.OUTER:
+			if divert_at_gate:
+				divert_at_gate = false
+				path_state = PathState.LUDO
+				entry_gate = current_node
+				entry_node = node
+				ludo_steps = 0
+				lap_route = LapRoute.UNDECIDED
+		PathState.LUDO:
+			if node.tile_type == BoardNode.TileType.LUDO:
+				ludo_steps += 1
+			elif node.tile_type == BoardNode.TileType.ENTRY_GATE:
+				# Leaving the Ludo board back onto the outer ring
+				path_state = PathState.OUTER
+				entry_node = null
+				entry_gate = null
+				ludo_steps = 0
+				lap_route = LapRoute.UNDECIDED
+			else:
+				path_state = PathState.HOME_STRETCH
+	if node.tile_type == BoardNode.TileType.THRONE:
+		path_state = PathState.VAIKUNTHA
+
+	current_node = node
+
+	# Smooth sliding animation over 0.25 seconds per space
+	var tween = create_tween()
+	tween.tween_property(self, "global_position", current_node.global_position + get_board_offset(), 0.25)
+	tween.parallel().tween_property(self, "scale", get_board_scale(), 0.25)
+	await tween.finished
+	emit_signal("step_finished", self, current_node)
+	await get_tree().create_timer(0.05).timeout # Brief pause between steps
+
+# Moves the pawn step-by-step along its path. If the move ends exactly on an
+# Entry Gate, it asks gate_chooser (a coroutine taking (pawn, gate) -> bool)
+# whether to divert. Passing over a gate never offers entry.
+# If it ends exactly on a Ludo arm tip, it asks exit_chooser (same signature)
+# whether to leave through that arm's gate.
+# On completing a Ludo lap it asks lap_handler (a coroutine taking (pawn) -> LapRoute)
+# whether to turn home, loop again or exit.
+func move_steps(steps: int, gate_chooser: Callable, lap_handler: Callable, exit_chooser: Callable):
 	for i in range(steps):
-		if current_node == null or current_node.next_node == null:
+		var next = get_next_node()
+		if next == null:
 			print("Error: Unlinked node encountered!")
 			break
-			
-		# Advance to next Monopoly node
-		current_node = current_node.next_node
-		
-		# Smooth sliding animation over 0.25 seconds per space
-		var tween = create_tween()
-		tween.tween_property(self, "global_position", current_node.global_position, 0.25)
-		await tween.finished
-		await get_tree().create_timer(0.05).timeout # Brief pause between steps
+
+		await step_to(next)
+
+		# Reaching Vaikuntha ends the move (MainBoard only allows exact rolls to get here)
+		if path_state == PathState.VAIKUNTHA:
+			break
+
+		# Decided once per lap, whether the pawn passes the junction or stops on it
+		if is_at_lap_junction() and lap_route == LapRoute.UNDECIDED:
+			lap_route = await lap_handler.call(self)
+			if lap_route == LapRoute.LOOP_AGAIN:
+				ludo_steps = 0
+				lap_route = LapRoute.UNDECIDED
+
+	# Entering moves the pawn onto the arm's first tile right away
+	if is_on_gate():
+		divert_at_gate = await gate_chooser.call(self, current_node)
+		if divert_at_gate:
+			await step_to(current_node.branch_ludo_node)
+	# Exiting moves the pawn out onto the gate right away
+	elif can_exit_here():
+		var gate = current_node.exit_gate_node
+		if await exit_chooser.call(self, gate):
+			await step_to(gate)
 
 	emit_signal("movement_finished", self)

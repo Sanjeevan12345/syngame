@@ -1,29 +1,54 @@
 [gd_scene format=3 uid="uid://dq42mro2rtvmp"]
 
-[ext_resource type="PackedScene" uid="uid://d3tlsnvvxw45o" path="res://scenes/dice.tscn" id="1_bvgiu"]
+[ext_resource type="PackedScene" path="res://scenes/pasa_die.tscn" id="1_pasa"]
+[ext_resource type="Script" uid="uid://crt7qkhf8krj3" path="res://scripts/pasa_dice_roller.gd" id="2_roller"]
+[ext_resource type="PackedScene" uid="uid://dx50kxmf5rtje" path="res://assets/dice_container.glb" id="3_container"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_omc5e"]
-size = Vector3(25, 1, 25)
+[sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
+size = Vector3(12, 1, 12)
 
-[sub_resource type="BoxMesh" id="BoxMesh_dh6rv"]
-size = Vector3(50, 1, 50)
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_ns"]
+size = Vector3(12, 6, 1.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_ew"]
+size = Vector3(1.1, 6, 12)
 
 [node name="dice_main" type="Node3D" unique_id=319496564]
+script = ExtResource("2_roller")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=78110493]
+[node name="DiceContainer" parent="." unique_id=502259911 instance=ExtResource("3_container")]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0.258, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=94773276]
-shape = SubResource("BoxShape3D_omc5e")
+[node name="ContainerCollision" type="StaticBody3D" parent="." unique_id=1807384043]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=950931825]
-mesh = SubResource("BoxMesh_dh6rv")
+[node name="Floor" type="CollisionShape3D" parent="ContainerCollision" unique_id=1702530396]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_floor")
 
-[node name="Dice" parent="." unique_id=970447176 instance=ExtResource("1_bvgiu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-mass = 1.0
+[node name="North" type="CollisionShape3D" parent="ContainerCollision" unique_id=1602093382]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -5.45)
+shape = SubResource("BoxShape3D_wall_ns")
+
+[node name="South" type="CollisionShape3D" parent="ContainerCollision" unique_id=923794326]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 5.45)
+shape = SubResource("BoxShape3D_wall_ns")
+
+[node name="East" type="CollisionShape3D" parent="ContainerCollision" unique_id=31197663]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.45, 3, 0)
+shape = SubResource("BoxShape3D_wall_ew")
+
+[node name="West" type="CollisionShape3D" parent="ContainerCollision" unique_id=379985567]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.45, 3, 0)
+shape = SubResource("BoxShape3D_wall_ew")
+
+[node name="PasaDie1" parent="." unique_id=1717733359 instance=ExtResource("1_pasa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 0.3, 0)
+
+[node name="PasaDie2" parent="." unique_id=285576867 instance=ExtResource("1_pasa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0.3, 0)
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1935514891]
-transform = Transform3D(0.7837155, -0.15968822, 0.60024124, 0, 0.96638554, 0.25709727, -0.6211199, -0.20149113, 0.75737137, 10.66635, 4.5138683, 13.295198)
+transform = Transform3D(-0.7506619, -0.42377812, 0.5068716, 0, 0.7671892, 0.64142084, -0.66068655, 0.4814902, -0.5758997, 10.018115, 13.185651, -12.037002)
 current = true
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1885800893]

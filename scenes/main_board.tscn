@@ -4,9 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://brvfypa8nfe52" path="res://assets/Board BG.jpeg" id="1_fpjay"]
 [ext_resource type="Script" uid="uid://c7etm46sg6rlo" path="res://scripts/MainBoard.gd" id="1_rymyb"]
 [ext_resource type="Script" uid="uid://bcg2qnmvfw742" path="res://scenes/monopoly_nodes.gd" id="3_382s8"]
-[ext_resource type="PackedScene" uid="uid://cicykggtt3svg" path="res://scenes/Pawn.tscn" id="4_pb2sh"]
-[ext_resource type="Script" uid="uid://rn5tx7s3613n" path="res://scripts/Pawn.gd" id="5_pb2sh"]
 [ext_resource type="PackedScene" uid="uid://dq42mro2rtvmp" path="res://scenes/dice_main.tscn" id="6_oj5fh"]
+[ext_resource type="Script" path="res://scripts/DevMode.gd" id="7_devmode"]
 
 [node name="MainBoard" type="Node2D" unique_id=356345126]
 script = ExtResource("1_rymyb")
@@ -42,6 +41,7 @@ position = Vector2(963, 839)
 script = ExtResource("1_ekdbr")
 node_id = 1
 property_name = "Gandhara"
+color_set = "Black"
 purchase_cost = 400
 next_node = NodePath("../Node_2")
 metadata/_tc_uuid = "4720102829908082635"
@@ -50,7 +50,9 @@ metadata/_tc_uuid = "4720102829908082635"
 position = Vector2(963, 761)
 script = ExtResource("1_ekdbr")
 node_id = 2
+tile_type = 5
 property_name = "Vana Daan"
+tile_gold = 50
 purchase_cost = 0
 base_rent = 0
 next_node = NodePath("../Node_3")
@@ -61,6 +63,7 @@ position = Vector2(966, 689)
 script = ExtResource("1_ekdbr")
 node_id = 3
 property_name = "Kosala"
+color_set = "Black"
 purchase_cost = 360
 base_rent = 40
 next_node = NodePath("../Node_4")
@@ -71,6 +74,7 @@ position = Vector2(969, 615)
 script = ExtResource("1_ekdbr")
 node_id = 4
 property_name = "Malava"
+color_set = "Crimson"
 purchase_cost = 340
 base_rent = 32
 next_node = NodePath("../Node_5")
@@ -81,7 +85,7 @@ position = Vector2(969, 536)
 script = ExtResource("1_ekdbr")
 node_id = 5
 tile_type = 1
-property_name = "Magadha gate"
+property_name = "Gate Magadha"
 purchase_cost = 0
 base_rent = 0
 next_node = NodePath("../Node_6")
@@ -93,6 +97,7 @@ position = Vector2(974, 462)
 script = ExtResource("1_ekdbr")
 node_id = 6
 property_name = "Kalinga"
+color_set = "Crimson"
 purchase_cost = 320
 base_rent = 30
 next_node = NodePath("../Node_7")
@@ -102,7 +107,9 @@ metadata/_tc_uuid = "2232866640041692024"
 position = Vector2(976, 384)
 script = ExtResource("1_ekdbr")
 node_id = 7
+tile_type = 5
 property_name = "Yajna Dakshina"
+tile_gold = 100
 purchase_cost = 0
 base_rent = 0
 next_node = NodePath("../Node_8")
@@ -113,6 +120,7 @@ position = Vector2(976, 309)
 script = ExtResource("1_ekdbr")
 node_id = 8
 property_name = "Anga"
+color_set = "Crimson"
 purchase_cost = 300
 base_rent = 28
 next_node = NodePath("../Node_9")
@@ -123,6 +131,7 @@ position = Vector2(977, 232)
 script = ExtResource("1_ekdbr")
 node_id = 9
 property_name = "vanga"
+color_set = "Blue"
 purchase_cost = 280
 base_rent = 26
 next_node = NodePath("../Node_10")
@@ -143,6 +152,7 @@ position = Vector2(859, 135)
 script = ExtResource("1_ekdbr")
 node_id = 11
 property_name = "Shurasena"
+color_set = "Blue"
 purchase_cost = 260
 base_rent = 24
 next_node = NodePath("../Node_12")
@@ -152,6 +162,7 @@ metadata/_tc_uuid = "31702617195739913"
 position = Vector2(787, 135)
 script = ExtResource("1_ekdbr")
 node_id = 12
+tile_type = 6
 property_name = "Dharma"
 purchase_cost = 0
 base_rent = 0
@@ -163,6 +174,7 @@ position = Vector2(712, 132)
 script = ExtResource("1_ekdbr")
 node_id = 13
 property_name = "Kushal"
+color_set = "Blue"
 purchase_cost = 240
 base_rent = 22
 next_node = NodePath("../Node_14")
@@ -173,19 +185,22 @@ position = Vector2(641, 129)
 script = ExtResource("1_ekdbr")
 node_id = 14
 property_name = "Virata"
+color_set = "Green"
 purchase_cost = 220
 base_rent = 20
 next_node = NodePath("../Node_15")
 metadata/_tc_uuid = "31702617195739913"
 
-[node name="Node_15" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=698299758 node_paths=PackedStringArray("next_node")]
+[node name="Node_15" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=698299758 node_paths=PackedStringArray("next_node", "branch_ludo_node")]
 position = Vector2(563, 127)
 script = ExtResource("1_ekdbr")
+tile_type = 1
 node_id = 15
-property_name = "Panchala"
+property_name = "Gate Panchala"
 purchase_cost = 0
 base_rent = 0
 next_node = NodePath("../Node_16")
+branch_ludo_node = NodePath("../../LudoNodes/Node_54")
 metadata/_tc_uuid = "31702617195739913"
 
 [node name="Node_16" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1224781312 node_paths=PackedStringArray("next_node")]
@@ -193,6 +208,7 @@ position = Vector2(488, 133)
 script = ExtResource("1_ekdbr")
 node_id = 16
 property_name = "Kashi"
+color_set = "Green"
 base_rent = 18
 next_node = NodePath("../Node_17")
 metadata/_tc_uuid = "31702617195739913"
@@ -211,7 +227,9 @@ metadata/_tc_uuid = "31702617195739913"
 position = Vector2(332, 135)
 script = ExtResource("1_ekdbr")
 node_id = 18
+tile_type = 5
 property_name = "Rajasva Kara"
+tile_gold = 150
 purchase_cost = 0
 base_rent = 0
 next_node = NodePath("../Node_19")
@@ -222,6 +240,7 @@ position = Vector2(257, 132)
 script = ExtResource("1_ekdbr")
 node_id = 19
 property_name = "Kuru"
+color_set = "Green"
 purchase_cost = 180
 base_rent = 16
 next_node = NodePath("../Node_20")
@@ -242,6 +261,7 @@ position = Vector2(159, 227)
 script = ExtResource("1_ekdbr")
 node_id = 21
 property_name = "Kamakya"
+color_set = "Orange"
 purchase_cost = 160
 base_rent = 14
 next_node = NodePath("../Node_22")
@@ -252,6 +272,7 @@ position = Vector2(158, 311)
 script = ExtResource("1_ekdbr")
 node_id = 22
 property_name = "Bahira"
+color_set = "Orange"
 purchase_cost = 160
 base_rent = 14
 next_node = NodePath("../Node_23")
@@ -272,19 +293,22 @@ position = Vector2(156, 460)
 script = ExtResource("1_ekdbr")
 node_id = 24
 property_name = "Saurastra"
+color_set = "Orange"
 purchase_cost = 140
 base_rent = 12
 next_node = NodePath("../Node_25")
 metadata/_tc_uuid = "31702617195739913"
 
-[node name="Node_25" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1703649889 node_paths=PackedStringArray("next_node")]
+[node name="Node_25" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1703649889 node_paths=PackedStringArray("next_node", "branch_ludo_node")]
 position = Vector2(160, 535)
 script = ExtResource("1_ekdbr")
+tile_type = 1
 node_id = 25
-property_name = "Indraprastha"
+property_name = "Gate Indraprastha"
 purchase_cost = 0
 base_rent = 0
 next_node = NodePath("../Node_26")
+branch_ludo_node = NodePath("../../LudoNodes/Node_36")
 metadata/_tc_uuid = "31702617195739913"
 
 [node name="Node_26" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=890277302 node_paths=PackedStringArray("next_node")]
@@ -292,6 +316,7 @@ position = Vector2(159, 610)
 script = ExtResource("1_ekdbr")
 node_id = 26
 property_name = "Sauvira"
+color_set = "Pink"
 purchase_cost = 120
 base_rent = 10
 next_node = NodePath("../Node_27")
@@ -311,7 +336,9 @@ metadata/_tc_uuid = "31702617195739913"
 position = Vector2(166, 764)
 script = ExtResource("1_ekdbr")
 node_id = 28
+tile_type = 6
 property_name = "Adharma"
+card_deck = 1
 purchase_cost = 0
 base_rent = 0
 next_node = NodePath("../Node_29")
@@ -322,6 +349,7 @@ position = Vector2(166, 840)
 script = ExtResource("1_ekdbr")
 node_id = 29
 property_name = "Karusha"
+color_set = "Pink"
 purchase_cost = 100
 base_rent = 8
 next_node = NodePath("../Node_30")
@@ -342,6 +370,7 @@ position = Vector2(257, 943)
 script = ExtResource("1_ekdbr")
 node_id = 31
 property_name = "Dhwaraka"
+color_set = "Pink"
 purchase_cost = 100
 base_rent = 8
 next_node = NodePath("../Node_32")
@@ -352,6 +381,7 @@ position = Vector2(331, 943)
 script = ExtResource("1_ekdbr")
 node_id = 32
 property_name = "Vidarbha"
+color_set = "Slate"
 purchase_cost = 80
 base_rent = 6
 next_node = NodePath("../Node_33")
@@ -377,20 +407,23 @@ base_rent = 0
 next_node = NodePath("../Node_35")
 metadata/_tc_uuid = "31702617195739913"
 
-[node name="Node_35" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=546540499 node_paths=PackedStringArray("next_node")]
+[node name="Node_35" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=546540499 node_paths=PackedStringArray("next_node", "branch_ludo_node")]
 position = Vector2(562, 938)
 script = ExtResource("1_ekdbr")
+tile_type = 1
 node_id = 35
-property_name = "GandharaGate"
+property_name = "Gate Gandhara"
 purchase_cost = 0
 base_rent = 0
 next_node = NodePath("../Node_36")
+branch_ludo_node = NodePath("../../LudoNodes/Node_18")
 metadata/_tc_uuid = "31702617195739913"
 
 [node name="Node_36" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1797493170 node_paths=PackedStringArray("next_node")]
 position = Vector2(638, 938)
 script = ExtResource("1_ekdbr")
 node_id = 36
+tile_type = 6
 property_name = "AkshayaPatra"
 purchase_cost = 0
 base_rent = 0
@@ -402,6 +435,7 @@ position = Vector2(714, 938)
 script = ExtResource("1_ekdbr")
 node_id = 37
 property_name = "Kekeya"
+color_set = "Slate"
 purchase_cost = 60
 base_rent = 4
 next_node = NodePath("../Node_38")
@@ -422,6 +456,7 @@ position = Vector2(867, 939)
 script = ExtResource("1_ekdbr")
 node_id = 39
 property_name = "Sarasavata"
+color_set = "Slate"
 purchase_cost = 60
 base_rent = 4
 next_node = NodePath("../Node_0")
@@ -430,14 +465,17 @@ metadata/_tc_uuid = "31702617195739913"
 [node name="LudoNodes" type="Node2D" parent="BoardNodes" unique_id=316801073]
 metadata/_tc_uuid = "3082418134611597345"
 
-[node name="Node_0" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=1276406641 node_paths=PackedStringArray("next_node")]
+[node name="Node_0" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=1276406641 node_paths=PackedStringArray("next_node", "home_stretch_node", "exit_gate_node")]
 position = Vector2(826, 537)
 script = ExtResource("1_ekdbr")
+is_safe = true
 tile_type = 2
-property_name = "Rajasuva Yajna"
+property_name = "Magadha Arm"
 purchase_cost = 0
 base_rent = 0
 next_node = NodePath("../Node_1")
+home_stretch_node = NodePath("../../HomeNodes/Magadha_1")
+exit_gate_node = NodePath("../../MonopolyNodes/Node_5")
 metadata/_tc_uuid = "1514249906844133189"
 
 [node name="Node_1" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=1700565276 node_paths=PackedStringArray("next_node")]
@@ -510,6 +548,7 @@ metadata/_tc_uuid = "1514249906844133189"
 [node name="Node_8" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=475789130 node_paths=PackedStringArray("next_node")]
 position = Vector2(669, 590)
 script = ExtResource("1_ekdbr")
+is_safe = true
 node_id = 4
 tile_type = 2
 purchase_cost = 0
@@ -520,6 +559,7 @@ metadata/_tc_uuid = "1514249906844133189"
 [node name="Node_9" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=182169134 node_paths=PackedStringArray("next_node")]
 position = Vector2(648, 622)
 script = ExtResource("1_ekdbr")
+is_safe = true
 node_id = 4
 tile_type = 2
 purchase_cost = 0
@@ -530,6 +570,7 @@ metadata/_tc_uuid = "1514249906844133189"
 [node name="Node_10" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=1343651853 node_paths=PackedStringArray("next_node")]
 position = Vector2(616, 646)
 script = ExtResource("1_ekdbr")
+is_safe = true
 node_id = 4
 tile_type = 2
 purchase_cost = 0
@@ -607,14 +648,18 @@ base_rent = 0
 next_node = NodePath("../Node_18")
 metadata/_tc_uuid = "1514249906844133189"
 
-[node name="Node_18" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=370589538 node_paths=PackedStringArray("next_node")]
+[node name="Node_18" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=370589538 node_paths=PackedStringArray("next_node", "home_stretch_node", "exit_gate_node")]
 position = Vector2(561, 804)
 script = ExtResource("1_ekdbr")
+is_safe = true
+property_name = "Gandhara Arm"
 node_id = 4
 tile_type = 2
 purchase_cost = 0
 base_rent = 0
 next_node = NodePath("../Node_19")
+home_stretch_node = NodePath("../../HomeNodes/Gandhara_1")
+exit_gate_node = NodePath("../../MonopolyNodes/Node_35")
 metadata/_tc_uuid = "1514249906844133189"
 
 [node name="Node_19" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=347520761 node_paths=PackedStringArray("next_node")]
@@ -677,18 +722,20 @@ base_rent = 0
 next_node = NodePath("../Node_25")
 metadata/_tc_uuid = "1514249906844133189"
 
-[node name="Node_25" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=152742185]
+[node name="Node_25" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=152742185 node_paths=PackedStringArray("next_node")]
 position = Vector2(536, 657)
 script = ExtResource("1_ekdbr")
 node_id = 4
 tile_type = 2
 purchase_cost = 0
 base_rent = 0
+next_node = NodePath("../Node_26")
 metadata/_tc_uuid = "1514249906844133189"
 
 [node name="Node_26" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=1006329029 node_paths=PackedStringArray("next_node")]
 position = Vector2(506, 645)
 script = ExtResource("1_ekdbr")
+is_safe = true
 node_id = 4
 tile_type = 2
 purchase_cost = 0
@@ -699,6 +746,7 @@ metadata/_tc_uuid = "1514249906844133189"
 [node name="Node_27" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=630915221 node_paths=PackedStringArray("next_node")]
 position = Vector2(474, 623)
 script = ExtResource("1_ekdbr")
+is_safe = true
 node_id = 4
 tile_type = 2
 purchase_cost = 0
@@ -709,6 +757,7 @@ metadata/_tc_uuid = "1514249906844133189"
 [node name="Node_28" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=1365350810 node_paths=PackedStringArray("next_node")]
 position = Vector2(450, 591)
 script = ExtResource("1_ekdbr")
+is_safe = true
 node_id = 4
 tile_type = 2
 purchase_cost = 0
@@ -786,14 +835,18 @@ base_rent = 0
 next_node = NodePath("../Node_36")
 metadata/_tc_uuid = "1514249906844133189"
 
-[node name="Node_36" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=902333762 node_paths=PackedStringArray("next_node")]
+[node name="Node_36" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=902333762 node_paths=PackedStringArray("next_node", "home_stretch_node", "exit_gate_node")]
 position = Vector2(295, 536)
 script = ExtResource("1_ekdbr")
+is_safe = true
+property_name = "Indraprastha Arm"
 node_id = 4
 tile_type = 2
 purchase_cost = 0
 base_rent = 0
 next_node = NodePath("../Node_37")
+home_stretch_node = NodePath("../../HomeNodes/Indraprastha_1")
+exit_gate_node = NodePath("../../MonopolyNodes/Node_25")
 metadata/_tc_uuid = "1514249906844133189"
 
 [node name="Node_37" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=669839826 node_paths=PackedStringArray("next_node")]
@@ -869,6 +922,7 @@ metadata/_tc_uuid = "1514249906844133189"
 [node name="Node_44" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=626288803 node_paths=PackedStringArray("next_node")]
 position = Vector2(450, 483)
 script = ExtResource("1_ekdbr")
+is_safe = true
 node_id = 4
 tile_type = 2
 purchase_cost = 0
@@ -879,6 +933,7 @@ metadata/_tc_uuid = "1514249906844133189"
 [node name="Node_45" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=1287507620 node_paths=PackedStringArray("next_node")]
 position = Vector2(474, 450)
 script = ExtResource("1_ekdbr")
+is_safe = true
 node_id = 4
 tile_type = 2
 purchase_cost = 0
@@ -889,6 +944,7 @@ metadata/_tc_uuid = "1514249906844133189"
 [node name="Node_46" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=1211922824 node_paths=PackedStringArray("next_node")]
 position = Vector2(504, 427)
 script = ExtResource("1_ekdbr")
+is_safe = true
 node_id = 4
 tile_type = 2
 purchase_cost = 0
@@ -966,14 +1022,18 @@ base_rent = 0
 next_node = NodePath("../Node_54")
 metadata/_tc_uuid = "1514249906844133189"
 
-[node name="Node_54" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=157186440 node_paths=PackedStringArray("next_node")]
+[node name="Node_54" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=157186440 node_paths=PackedStringArray("next_node", "home_stretch_node", "exit_gate_node")]
 position = Vector2(560, 272)
 script = ExtResource("1_ekdbr")
+is_safe = true
+property_name = "Panchala Arm"
 node_id = 4
 tile_type = 2
 purchase_cost = 0
 base_rent = 0
 next_node = NodePath("../Node_55")
+home_stretch_node = NodePath("../../HomeNodes/Panchala_1")
+exit_gate_node = NodePath("../../MonopolyNodes/Node_15")
 metadata/_tc_uuid = "1514249906844133189"
 
 [node name="Node_55" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=261537090 node_paths=PackedStringArray("next_node")]
@@ -1049,6 +1109,7 @@ metadata/_tc_uuid = "1514249906844133189"
 [node name="Node_62" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=401158279 node_paths=PackedStringArray("next_node")]
 position = Vector2(616, 427)
 script = ExtResource("1_ekdbr")
+is_safe = true
 node_id = 4
 tile_type = 2
 purchase_cost = 0
@@ -1059,6 +1120,7 @@ metadata/_tc_uuid = "1514249906844133189"
 [node name="Node_63" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=1773717493 node_paths=PackedStringArray("next_node")]
 position = Vector2(648, 450)
 script = ExtResource("1_ekdbr")
+is_safe = true
 node_id = 4
 tile_type = 2
 purchase_cost = 0
@@ -1069,6 +1131,7 @@ metadata/_tc_uuid = "1514249906844133189"
 [node name="Node_64" type="Marker2D" parent="BoardNodes/LudoNodes" unique_id=1266113091 node_paths=PackedStringArray("next_node")]
 position = Vector2(669, 483)
 script = ExtResource("1_ekdbr")
+is_safe = true
 node_id = 4
 tile_type = 2
 purchase_cost = 0
@@ -1143,61 +1206,336 @@ node_id = 4
 tile_type = 2
 purchase_cost = 0
 base_rent = 0
-next_node = NodePath("../../MonopolyNodes/Node_0")
+next_node = NodePath("../Node_0")
 metadata/_tc_uuid = "1514249906844133189"
+
+[node name="HomeNodes" type="Node2D" parent="BoardNodes"]
+
+[node name="Magadha_1" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(801, 536)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Magadha Home Stretch 1"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Magadha_2")
+
+[node name="Magadha_2" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(777, 536)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Magadha Home Stretch 2"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Magadha_3")
+
+[node name="Magadha_3" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(754, 536)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Magadha Home Stretch 3"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Magadha_4")
+
+[node name="Magadha_4" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(730, 536)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Magadha Home Stretch 4"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Magadha_5")
+
+[node name="Magadha_5" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(707, 536)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Magadha Home Stretch 5"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Magadha_6")
+
+[node name="Magadha_6" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(680, 536)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Magadha Home Stretch 6"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Vaikuntha")
+
+[node name="Gandhara_1" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(561, 779)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Gandhara Home Stretch 1"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Gandhara_2")
+
+[node name="Gandhara_2" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(561, 755)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Gandhara Home Stretch 2"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Gandhara_3")
+
+[node name="Gandhara_3" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(561, 730)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Gandhara Home Stretch 3"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Gandhara_4")
+
+[node name="Gandhara_4" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(561, 706)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Gandhara Home Stretch 4"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Gandhara_5")
+
+[node name="Gandhara_5" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(561, 682)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Gandhara Home Stretch 5"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Gandhara_6")
+
+[node name="Gandhara_6" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(561, 657)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Gandhara Home Stretch 6"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Vaikuntha")
+
+[node name="Indraprastha_1" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(319, 536)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Indraprastha Home Stretch 1"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Indraprastha_2")
+
+[node name="Indraprastha_2" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(343, 536)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Indraprastha Home Stretch 2"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Indraprastha_3")
+
+[node name="Indraprastha_3" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(366, 536)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Indraprastha Home Stretch 3"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Indraprastha_4")
+
+[node name="Indraprastha_4" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(391, 536)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Indraprastha Home Stretch 4"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Indraprastha_5")
+
+[node name="Indraprastha_5" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(415, 536)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Indraprastha Home Stretch 5"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Indraprastha_6")
+
+[node name="Indraprastha_6" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(439, 536)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Indraprastha Home Stretch 6"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Vaikuntha")
+
+[node name="Panchala_1" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(560, 297)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Panchala Home Stretch 1"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Panchala_2")
+
+[node name="Panchala_2" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(560, 321)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Panchala Home Stretch 2"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Panchala_3")
+
+[node name="Panchala_3" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(560, 346)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Panchala Home Stretch 3"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Panchala_4")
+
+[node name="Panchala_4" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(560, 369)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Panchala Home Stretch 4"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Panchala_5")
+
+[node name="Panchala_5" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(560, 393)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Panchala Home Stretch 5"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Panchala_6")
+
+[node name="Panchala_6" type="Marker2D" parent="BoardNodes/HomeNodes" node_paths=PackedStringArray("next_node")]
+position = Vector2(560, 417)
+script = ExtResource("1_ekdbr")
+tile_type = 3
+property_name = "Panchala Home Stretch 6"
+purchase_cost = 0
+base_rent = 0
+next_node = NodePath("../Vaikuntha")
+
+[node name="Vaikuntha" type="Marker2D" parent="BoardNodes/HomeNodes"]
+position = Vector2(560, 536)
+script = ExtResource("1_ekdbr")
+tile_type = 4
+property_name = "Vaikuntha Lotus"
+purchase_cost = 0
+base_rent = 0
 
 [node name="UI_Layer" type="CanvasLayer" parent="." unique_id=711087732]
 metadata/_tc_uuid = "6483076611961940841"
 
-[node name="GateChoiceModal" type="Control" parent="UI_Layer" unique_id=1125588243]
+[node name="GatePrompt" type="HBoxContainer" parent="UI_Layer"]
 visible = false
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-metadata/_tc_uuid = "8264625116248354299"
+offset_left = 1140.0
+offset_top = 445.0
+offset_right = 1790.0
+offset_bottom = 495.0
+alignment = 1
 
-[node name="PanelContainer" type="PanelContainer" parent="UI_Layer/GateChoiceModal" unique_id=1751831490]
-layout_mode = 0
-offset_right = 198.0
-offset_bottom = 40.0
-metadata/_tc_uuid = "3751618598789461342"
-
-[node name="BtnEnterLudo" type="Button" parent="UI_Layer/GateChoiceModal/PanelContainer" unique_id=271663474]
+[node name="GateLabel" type="Label" parent="UI_Layer/GatePrompt"]
 layout_mode = 2
-text = "Enter Ludo Orbit"
-metadata/_tc_uuid = "7817899809612404857"
+theme_override_font_sizes/font_size = 20
 
-[node name="BtnStay Monopoly" type="Button" parent="UI_Layer/GateChoiceModal/PanelContainer" unique_id=1241895940]
+[node name="EnterButton" type="Button" parent="UI_Layer/GatePrompt"]
 layout_mode = 2
-text = "Continue Monopoly Ring"
-metadata/_tc_uuid = "5019348638962356225"
+text = "Enter Ludo board"
 
-[node name="RollButton" type="Button" parent="UI_Layer" unique_id=547643603]
-offset_left = 194.0
-offset_top = 469.0
-offset_right = 283.0
-offset_bottom = 500.0
-text = "ROLL DICE"
+[node name="StayButton" type="Button" parent="UI_Layer/GatePrompt"]
+layout_mode = 2
+text = "Stay on outer ring"
+
+[node name="LapPrompt" type="HBoxContainer" parent="UI_Layer"]
+visible = false
+offset_left = 1140.0
+offset_top = 445.0
+offset_right = 1790.0
+offset_bottom = 495.0
+alignment = 1
+
+[node name="LapLabel" type="Label" parent="UI_Layer/LapPrompt"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+
+[node name="LoopButton" type="Button" parent="UI_Layer/LapPrompt"]
+layout_mode = 2
+text = "Loop again"
+
+[node name="ExitButton" type="Button" parent="UI_Layer/LapPrompt"]
+layout_mode = 2
+text = "Exit to outer ring"
+
+[node name="TurnLabel" type="Label" parent="UI_Layer"]
+offset_left = 1140.0
+offset_top = 400.0
+offset_right = 1790.0
+offset_bottom = 440.0
+theme_override_font_sizes/font_size = 28
+text = "Player 1's Turn"
+horizontal_alignment = 1
+
+[node name="PlayersPanel" type="VBoxContainer" parent="UI_Layer"]
+offset_left = 1140.0
+offset_top = 40.0
+offset_right = 1790.0
+offset_bottom = 240.0
+
+[node name="MessageLabel" type="Label" parent="UI_Layer"]
+offset_left = 1140.0
+offset_top = 250.0
+offset_right = 1790.0
+offset_bottom = 390.0
+theme_override_font_sizes/font_size = 20
+autowrap_mode = 3
+
+[node name="BuyPrompt" type="HBoxContainer" parent="UI_Layer"]
+visible = false
+offset_left = 1140.0
+offset_top = 445.0
+offset_right = 1790.0
+offset_bottom = 495.0
+alignment = 1
+
+[node name="BuyLabel" type="Label" parent="UI_Layer/BuyPrompt"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+
+[node name="BuyButton" type="Button" parent="UI_Layer/BuyPrompt"]
+layout_mode = 2
+text = "Buy"
+
+[node name="PassButton" type="Button" parent="UI_Layer/BuyPrompt"]
+layout_mode = 2
+text = "Pass"
 
 [node name="Pawns" type="Node2D" parent="." unique_id=204447783]
 
-[node name="Pawn_P1" parent="Pawns" unique_id=1838398057 instance=ExtResource("4_pb2sh")]
-scale = Vector2(0.2, 0.2)
-script = ExtResource("5_pb2sh")
-
-[node name="Pawn_P2" parent="Pawns" unique_id=1977197882 instance=ExtResource("4_pb2sh")]
-scale = Vector2(0.2, 0.2)
-script = ExtResource("5_pb2sh")
-
 [node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=1782796200]
-visible = false
-offset_right = 512.0
-offset_bottom = 512.0
+offset_left = 1133.0
+offset_top = 504.0
+offset_right = 1798.0
+offset_bottom = 1016.0
 
 [node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=146400802]
 transparent_bg = true
 handle_input_locally = false
-render_target_update_mode = 0
+size = Vector2i(712, 512)
+render_target_update_mode = 4
 
 [node name="dice_main" parent="SubViewportContainer/SubViewport" unique_id=319496564 instance=ExtResource("6_oj5fh")]
+
+[node name="DevMode" type="CanvasLayer" parent="."]
+script = ExtResource("7_devmode")
