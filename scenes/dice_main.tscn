@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://dq42mro2rtvmp"]
+
+[ext_resource type="PackedScene" uid="uid://d3tlsnvvxw45o" path="res://scenes/dice.tscn" id="1_bvgiu"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_omc5e"]
+size = Vector3(25, 1, 25)
+
+[sub_resource type="BoxMesh" id="BoxMesh_dh6rv"]
+size = Vector3(50, 1, 50)
+
+[node name="dice_main" type="Node3D" unique_id=319496564]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=78110493]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=94773276]
+shape = SubResource("BoxShape3D_omc5e")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=950931825]
+mesh = SubResource("BoxMesh_dh6rv")
+
+[node name="Dice" parent="." unique_id=970447176 instance=ExtResource("1_bvgiu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mass = 1.0
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1935514891]
+transform = Transform3D(0.7837155, -0.15968822, 0.60024124, 0, 0.96638554, 0.25709727, -0.6211199, -0.20149113, 0.75737137, 10.66635, 4.5138683, 13.295198)
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1885800893]
+transform = Transform3D(0.11938994, 0.6999892, 0.704103, 0.11702202, -0.7141533, 0.69013816, 0.9859269, 7.551027e-09, -0.16717692, 2.9886885, 5.602068, 0)

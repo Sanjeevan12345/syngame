@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://d3tlsnvvxw45o"]
+
+[ext_resource type="Script" uid="uid://tcjpfovmm38j" path="res://scripts/dice.gd" id="1_mg5ex"]
+[ext_resource type="Texture2D" uid="uid://d3n7fyicks5sc" path="res://assets/dice1.jpg" id="2_oi81l"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_w2xmm"]
+friction = 0.2
+bounce = 0.55
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_omc5e"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_omc5e"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dh6rv"]
+albedo_texture = ExtResource("2_oi81l")
+
+[node name="Dice" type="RigidBody3D" unique_id=970447176]
+mass = 3.0
+physics_material_override = SubResource("PhysicsMaterial_w2xmm")
+script = ExtResource("1_mg5ex")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=909278792]
+shape = SubResource("BoxShape3D_omc5e")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=837132634]
+mesh = SubResource("BoxMesh_omc5e")
+surface_material_override/0 = SubResource("StandardMaterial3D_dh6rv")

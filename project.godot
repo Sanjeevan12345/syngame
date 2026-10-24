@@ -11,8 +11,13 @@ config_version=5
 [application]
 
 config/name="SynGame"
+run/main_scene="uid://bwdmf74cdai1u"
 config/features=PackedStringArray("4.7", "Mobile")
 config/icon="res://icon.svg"
+
+[autoload]
+
+GameManager="*uid://cfx4x22c8koeg"
 
 [display]
 

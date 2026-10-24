@@ -1,8 +1,7 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bwdmf74cdai1u"]
 
-[ext_resource type="Script" path="res://scripts/BoardNode.gd" id="1_ekdbr"]
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1nek4"]
+[ext_resource type="Script" uid="uid://cgnc10rpo27ie" path="res://scripts/BoardNode.gd" id="1_ekdbr"]
+[ext_resource type="Texture2D" uid="uid://brvfypa8nfe52" path="res://assets/Board BG.jpeg" id="1_fpjay"]
 
 [node name="MainBoard" type="Node2D" unique_id=356345126]
 metadata/_tc_uuid = "3517047614286243854"
@@ -10,9 +9,9 @@ metadata/scene_file_path = "res://scenes/main_board.tscn"
 
 [node name="BoardBackground" type="Sprite2D" parent="." unique_id=674835067]
 texture_filter = 2
-position = Vector2(560, 536)
-scale = Vector2(1.0839987, 1.0799987)
-texture = SubResource("CompressedTexture2D_1nek4")
+position = Vector2(540, 540)
+scale = Vector2(0.65, 0.65)
+texture = ExtResource("1_fpjay")
 metadata/_tc_uuid = "5507380917958318684"
 
 [node name="BoardNodes" type="Node2D" parent="." unique_id=1964501668]
