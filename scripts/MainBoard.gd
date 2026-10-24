@@ -37,7 +37,14 @@ var players_pawns: Array = []
 var player_labels: Array = []
 var sell_buttons: Array = []
 var pending_roll: int = 0
-var state: TurnState = TurnState.WAIT_THROW
+var state: TurnState = TurnState.WAIT_THROW:
+	set(value):
+		state = value
+		# Building is only allowed while waiting to throw
+		if state != TurnState.WAIT_THROW and build_panel != null:
+			build_panel.visible = false
+		if not player_labels.is_empty():
+			refresh_players_panel()
 
 # Unowned Kingdom currently offered in the buy prompt
 var buy_candidate: BoardNode = null
@@ -50,14 +57,32 @@ var sell_title: Label
 var sell_list: VBoxContainer
 var sell_close_button: Button
 var sell_player: int = -1
+var build_buttons: Array = []
+
+# Build panel, built in code: the active player raises Forts / Palaces before throwing
+var build_panel: PanelContainer
+var build_title: Label
+var build_list: VBoxContainer
 var debt_player: int = -1
 var debt_amount: int = 0
 var debt_reason: String = ""
 
+# Set by an extra_turn card: the same player throws again after this move
+var extra_turn_pending: bool = false
+
+# Shakuni card picker, built in code: one button per possible Pasa score
+var shakuni_prompt: HBoxContainer
+signal shakuni_chosen(value: int)
+
 func _ready():
+	# The opening page's choice wins over the Inspector value
+	if GameManager.instance.selected_player_count > 0:
+		player_count = GameManager.instance.selected_player_count
 	GameManager.instance.setup_players(player_count)
 	spawn_pawns()
 	build_sell_panel()
+	build_build_panel()
+	build_shakuni_prompt()
 	build_players_panel()
 	GameManager.instance.gold_changed.connect(func(_id, _gold): refresh_players_panel())
 	GameManager.instance.kills_changed.connect(func(_id, _kills): refresh_players_panel())
@@ -80,7 +105,7 @@ func _ready():
 
 	dev_mode.forced_roll_requested.connect(_on_forced_roll)
 
-	update_turn_label()
+	begin_turn()
 
 # Places every player's 3 pawns on Start (Node_0), tinted by player
 func spawn_pawns():
@@ -91,7 +116,10 @@ func spawn_pawns():
 			pawn.owner_id = player_id
 			pawn.pawn_index = pawn_index
 			pawn.name = "Pawn_P%d_%d" % [player_id + 1, pawn_index + 1]
-			pawn.modulate = GameManager.PLAYER_COLORS[player_id]
+			# Players alternate between the two character designs; the colored
+			# ring under each pawn tells players apart
+			pawn.character = player_id % Pawn.CHARACTERS.size()
+			pawn.player_color = GameManager.PLAYER_COLORS[player_id]
 			pawn.visual_offset = Vector2((pawn_index - 1) * 14, (player_id - 1.5) * 10)
 			$Pawns.add_child(pawn)
 			pawn.set_initial_node(start_node)
@@ -112,6 +140,12 @@ func build_players_panel():
 		row.add_child(label)
 		player_labels.append(label)
 
+		var build = Button.new()
+		build.text = "Build"
+		build.pressed.connect(open_build_panel.bind(player_id))
+		row.add_child(build)
+		build_buttons.append(build)
+
 		var sell = Button.new()
 		sell.text = "Sell"
 		sell.pressed.connect(open_sell_panel.bind(player_id))
@@ -130,12 +164,103 @@ func refresh_players_panel():
 				gm.count_color_sets(player_id), GameManager.HOME_STRETCH_SETS_REQUIRED,
 				gm.player_kills[player_id], GameManager.HOME_STRETCH_KILLS_REQUIRED,
 				count_pawns_in_vaikuntha(player_id), GameManager.PAWNS_PER_PLAYER]
+			if gm.player_shakuni[player_id]:
+				player_labels[player_id].text += " | ★ Shakuni"
+			if gm.player_skip_turns[player_id] > 0:
+				player_labels[player_id].text += " | Skips %d" % gm.player_skip_turns[player_id]
 		sell_buttons[player_id].disabled = not can_sell(player_id)
+		build_buttons[player_id].disabled = not can_open_build(player_id)
 
 	# Selling during the buy prompt can make a Kingdom affordable
 	if buy_prompt.visible and buy_candidate != null:
 		update_buy_prompt()
 	refresh_sell_panel()
+	refresh_build_panel()
+
+# Only the active player may build, before throwing, and only on a full colour set
+func can_open_build(player_id: int) -> bool:
+	var gm = GameManager.instance
+	if state != TurnState.WAIT_THROW or player_id != gm.active_player_index or gm.player_eliminated[player_id]:
+		return false
+	return gm.player_kingdoms[player_id].any(func(n): return gm.owns_full_set(player_id, n.color_set))
+
+func build_build_panel():
+	build_panel = PanelContainer.new()
+	build_panel.visible = false
+	build_panel.position = Vector2(330, 260)
+	build_panel.custom_minimum_size = Vector2(460, 0)
+	$UI_Layer.add_child(build_panel)
+
+	var box = VBoxContainer.new()
+	build_panel.add_child(box)
+
+	build_title = Label.new()
+	build_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	build_title.custom_minimum_size = Vector2(440, 0)
+	box.add_child(build_title)
+
+	var scroll = ScrollContainer.new()
+	scroll.custom_minimum_size = Vector2(440, 300)
+	box.add_child(scroll)
+
+	build_list = VBoxContainer.new()
+	build_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(build_list)
+
+	var close = Button.new()
+	close.text = "Close"
+	close.pressed.connect(func(): build_panel.visible = false)
+	box.add_child(close)
+
+func open_build_panel(player_id: int):
+	if not can_open_build(player_id) or debt_player >= 0:
+		return
+	sell_panel.visible = false
+	build_panel.visible = true
+	refresh_build_panel()
+
+func describe_buildings(node: BoardNode) -> String:
+	if node.building_level == GameManager.PALACE_LEVEL:
+		return "Palace"
+	return "%d Fort%s" % [node.building_level, "" if node.building_level == 1 else "s"]
+
+# Lists every Kingdom in the active player's full colour sets with its next build step
+func refresh_build_panel():
+	if build_panel == null or not build_panel.visible:
+		return
+	var gm = GameManager.instance
+	var player_id = gm.active_player_index
+	if not can_open_build(player_id):
+		build_panel.visible = false
+		return
+
+	build_title.text = "Player %d: build Forts (up to 4), then a Palace. Build evenly across each set.\nBank: %d Forts, %d Palaces left" % [
+		player_id + 1, gm.forts_available, gm.palaces_available]
+	build_title.modulate = GameManager.PLAYER_COLORS[player_id]
+
+	for child in build_list.get_children():
+		child.queue_free()
+	for node in gm.player_kingdoms[player_id]:
+		if not gm.owns_full_set(player_id, node.color_set):
+			continue
+		var button = Button.new()
+		var reason = gm.build_block_reason(player_id, node)
+		var step = "Upgrade to Palace" if node.building_level == GameManager.MAX_FORTS else "Build Fort"
+		button.text = "%s (%s): %s - %s for %d Gold, rent %d" % [
+			node.property_name, node.color_set, describe_buildings(node), step, gm.fort_cost(node), gm.calc_rent(node)]
+		if node.building_level == GameManager.PALACE_LEVEL:
+			button.text = "%s (%s): Palace - rent %d" % [node.property_name, node.color_set, gm.calc_rent(node)]
+		if reason != "" and node.building_level != GameManager.PALACE_LEVEL:
+			button.text += "  [%s]" % reason
+		button.disabled = reason != ""
+		button.pressed.connect(_on_build_pressed.bind(player_id, node))
+		build_list.add_child(button)
+
+func _on_build_pressed(player_id: int, node: BoardNode):
+	if GameManager.instance.build_on(player_id, node):
+		show_message("Player %d built on %s: now %s (rent %d)" % [
+			player_id + 1, node.property_name, describe_buildings(node), GameManager.instance.calc_rent(node)])
+	refresh_players_panel()
 
 func can_sell(player_id: int) -> bool:
 	var gm = GameManager.instance
@@ -175,6 +300,7 @@ func open_sell_panel(player_id: int):
 	if debt_player >= 0 and player_id != debt_player:
 		return
 	sell_player = player_id
+	build_panel.visible = false
 	sell_panel.visible = true
 	refresh_sell_panel()
 
@@ -196,15 +322,35 @@ func refresh_sell_panel():
 	for child in sell_list.get_children():
 		child.queue_free()
 	for node in gm.player_kingdoms[sell_player]:
+		# Buildings come down first, evenly across the set, at half their price
+		if node.building_level > 0:
+			var piece = "Palace" if node.building_level == GameManager.PALACE_LEVEL else "Fort"
+			var building_button = Button.new()
+			building_button.text = "Sell a %s on %s (%s)" % [piece, node.property_name, describe_buildings(node)]
+			building_button.disabled = not can_sell(sell_player) or not gm.can_sell_building(sell_player, node)
+			if not gm.can_sell_building(sell_player, node):
+				building_button.text += "  [sell evenly]"
+			building_button.pressed.connect(_on_sell_building_pressed.bind(sell_player, node))
+			sell_list.add_child(building_button)
+
 		var button = Button.new()
 		button.text = "Sell %s (%s) for %d Gold" % [node.property_name, node.color_set, gm.resale_value(node)]
-		button.disabled = not can_sell(sell_player)
+		var set_built = gm.set_has_buildings(node.color_set)
+		if set_built:
+			button.text += "  [sell the set's buildings first]"
+		button.disabled = not can_sell(sell_player) or set_built
 		button.pressed.connect(_on_sell_pressed.bind(sell_player, node))
 		sell_list.add_child(button)
 
 func _on_sell_pressed(player_id: int, node: BoardNode):
 	var value = GameManager.instance.sell_kingdom(player_id, node)
 	show_message("Player %d sold %s to the Bank for %d Gold" % [player_id + 1, node.property_name, value])
+	refresh_players_panel()
+
+func _on_sell_building_pressed(player_id: int, node: BoardNode):
+	var value = GameManager.instance.sell_building(player_id, node)
+	show_message("Player %d sold a building on %s for %d Gold (now %s)" % [
+		player_id + 1, node.property_name, value, describe_buildings(node)])
 	refresh_players_panel()
 
 func show_message(text: String):
@@ -291,6 +437,7 @@ func _unhandled_input(event: InputEvent):
 
 func _on_pawn_selected(pawn: Pawn):
 	state = TurnState.MOVING
+	var mover_id = pawn.owner_id # Kept separately: the pawn is freed if its player goes bankrupt
 	for squad_pawn in players_pawns[pawn.owner_id]:
 		squad_pawn.set_selectable(false)
 
@@ -318,13 +465,20 @@ func _on_pawn_selected(pawn: Pawn):
 		return
 
 	# Vadh overrides the tile's economy rules
-	if not resolve_capture(pawn):
+	if not await resolve_capture(pawn):
 		await resolve_landing(pawn)
 
 	var remaining = GameManager.instance.get_remaining_players()
 	if remaining.size() == 1:
 		declare_winner(remaining[0], "is the last player standing")
 		return
+
+	if extra_turn_pending and not GameManager.instance.player_eliminated[mover_id]:
+		extra_turn_pending = false
+		show_message("Player %d throws again!" % (mover_id + 1))
+		begin_turn()
+		return
+	extra_turn_pending = false
 
 	switch_turn()
 
@@ -340,12 +494,20 @@ func resolve_capture(pawn: Pawn) -> bool:
 	for squad in players_pawns:
 		all_pawns.append_array(squad)
 
-	var victims = GameManager.instance.resolve_vadh(pawn, all_pawns, start_node)
+	var victims = GameManager.instance.find_vadh_victims(pawn, all_pawns, start_node)
+	if victims.is_empty():
+		return false
+
+	# The attacker swings at its victims before they are sent home
+	pawn.sprite.flip_h = victims[0].global_position.x < pawn.global_position.x
+	await pawn.play_fight()
+
 	for victim in victims:
+		GameManager.instance.execute_vadh_capture(pawn, victim, start_node)
 		show_message("VADH! Player %d captured Player %d's Pawn %d at %s - sent back to %s" % [
 			pawn.owner_id + 1, victim.owner_id + 1, victim.pawn_index + 1,
 			pawn.current_node.get_display_name(), start_node.property_name])
-	return not victims.is_empty()
+	return true
 
 # Applies the economy rules of the tile the pawn stopped on
 func resolve_landing(pawn: Pawn):
@@ -360,12 +522,8 @@ func resolve_landing(pawn: Pawn):
 
 		BoardNode.TileType.CARD:
 			var card = gm.draw_card(node.card_deck)
-			var amount: int = card["gold"]
-			show_message("%s card: %s (%+d Gold)" % [node.property_name, card["text"], amount])
-			if amount >= 0:
-				gm.add_gold(player_id, amount)
-			else:
-				await collect_payment(player_id, -amount, -1, node.property_name + " card")
+			show_message("%s card: %s" % [node.property_name, card["text"]])
+			await apply_card(pawn, card, node.property_name + " card")
 
 		BoardNode.TileType.MONOPOLY:
 			if not node.is_kingdom():
@@ -374,9 +532,13 @@ func resolve_landing(pawn: Pawn):
 				await offer_purchase(player_id, node)
 			elif node.owner_id != player_id:
 				var owner_id = node.owner_id
-				if await collect_payment(player_id, node.base_rent, owner_id, "rent on " + node.property_name):
-					show_message("Player %d paid %d Gold rent to Player %d for %s" % [
-						player_id + 1, node.base_rent, owner_id + 1, node.property_name])
+				var rent = gm.calc_rent(node)
+				var detail = describe_buildings(node)
+				if node.building_level == 0:
+					detail = "full set" if gm.owns_full_set(owner_id, node.color_set) else "no buildings"
+				if await collect_payment(player_id, rent, owner_id, "rent on " + node.property_name):
+					show_message("Player %d paid %d Gold rent (%s) to Player %d for %s" % [
+						player_id + 1, rent, detail, owner_id + 1, node.property_name])
 
 # Charges a player. If their Gold is short but Gold + 75% of their Kingdoms covers it,
 # they must sell Kingdoms until they can pay. If even that can't cover it, they go
@@ -514,9 +676,142 @@ func declare_winner(player_id: int, reason: String):
 
 func switch_turn():
 	GameManager.instance.end_turn()
+	print("Switched turn to: Player ", GameManager.instance.active_player_index + 1)
+	begin_turn()
+
+# Starts the active player's turn: a skip card passes it, a Shakuni card lets
+# them pick the roll, otherwise they throw the sticks
+func begin_turn():
+	var gm = GameManager.instance
+	var player_id = gm.active_player_index
+
+	if gm.player_skip_turns[player_id] > 0:
+		gm.player_skip_turns[player_id] -= 1
+		state = TurnState.MOVING
+		turn_label.text = "Player %d skips this turn" % (player_id + 1)
+		turn_label.modulate = GameManager.PLAYER_COLORS[player_id]
+		show_message("Player %d skips this turn" % (player_id + 1))
+		refresh_players_panel()
+		await get_tree().create_timer(1.5).timeout
+		switch_turn()
+		return
+
+	if gm.player_shakuni[player_id]:
+		gm.player_shakuni[player_id] = false
+		refresh_players_panel()
+		state = TurnState.ROLLING # Blocks throwing the sticks
+		turn_label.text = "Player %d - Shakuni's dice: choose your roll" % (player_id + 1)
+		turn_label.modulate = GameManager.PLAYER_COLORS[player_id]
+		shakuni_prompt.visible = true
+		var value: int = await shakuni_chosen
+		shakuni_prompt.visible = false
+		show_message("Player %d uses Shakuni's dice: %d" % [player_id + 1, value])
+		_on_dice_rolled(value)
+		return
+
 	state = TurnState.WAIT_THROW
 	update_turn_label()
-	print("Switched turn to: Player ", GameManager.instance.active_player_index + 1)
+
+func build_shakuni_prompt():
+	shakuni_prompt = HBoxContainer.new()
+	shakuni_prompt.visible = false
+	shakuni_prompt.position = Vector2(1140, 445)
+	$UI_Layer.add_child(shakuni_prompt)
+
+	var label = Label.new()
+	label.text = "Shakuni's dice:"
+	shakuni_prompt.add_child(label)
+
+	for value in GameManager.PASA_SCORES:
+		var button = Button.new()
+		button.text = str(value)
+		button.custom_minimum_size = Vector2(44, 0)
+		button.pressed.connect(func(): shakuni_chosen.emit(value))
+		shakuni_prompt.add_child(button)
+
+# Applies a Dharma/Adharma card drawn by this pawn's player
+func apply_card(pawn: Pawn, card: Dictionary, reason: String):
+	var gm = GameManager.instance
+	var player_id = pawn.owner_id
+	var amount: int = card.get("amount", 0)
+
+	match card["effect"]:
+		"gold":
+			if amount >= 0:
+				gm.add_gold(player_id, amount)
+			else:
+				await collect_payment(player_id, -amount, -1, reason)
+
+		"collect_each":
+			for opponent in gm.get_remaining_players():
+				if opponent != player_id:
+					await collect_payment(opponent, amount, player_id, reason)
+
+		"pay_each":
+			for opponent in gm.get_remaining_players():
+				if opponent != player_id and not gm.player_eliminated[player_id]:
+					await collect_payment(player_id, amount, opponent, reason)
+
+		"go_to_start":
+			# Card moves don't trigger the new tile's landing rules
+			pawn.reset_to_start(start_node)
+			if card.get("bonus", false):
+				gm.add_gold(player_id, GameManager.START_BONUS)
+				show_message("Player %d collects %d Gold at %s" % [player_id + 1, GameManager.START_BONUS, start_node.property_name])
+
+		"enter_ludo":
+			var gate = pawn.find_next_gate()
+			if gate != null:
+				await pawn.enter_ludo_through(gate)
+				show_message("Player %d's Pawn %d enters the Ludo board at %s" % [
+					player_id + 1, pawn.pawn_index + 1, gate.property_name])
+
+		"skip_self":
+			gm.player_skip_turns[player_id] += 1
+
+		"skip_next":
+			var rival = gm.next_active_opponent(player_id)
+			if rival != player_id:
+				gm.player_skip_turns[rival] += 1
+				show_message("Player %d will skip their next turn" % (rival + 1))
+
+		"extra_turn":
+			extra_turn_pending = true
+
+		"shakuni":
+			gm.player_shakuni[player_id] = true
+
+		"free_fort":
+			var target = gm.find_free_fort_target(player_id)
+			if target != null and gm.build_on(player_id, target, true):
+				show_message("A free Fort rises on %s (now %s)" % [target.property_name, describe_buildings(target)])
+			else:
+				gm.add_gold(player_id, amount)
+				show_message("Nowhere to build - Player %d receives %d Gold instead" % [player_id + 1, amount])
+
+		"burn_fort":
+			# The most-built Kingdom loses one step; nothing is refunded
+			var target: BoardNode = null
+			for node in gm.player_kingdoms[player_id]:
+				if node.building_level > 0 and (target == null or node.building_level > target.building_level):
+					target = node
+			if target != null:
+				gm.remove_building_level(target)
+				show_message("Fire on %s! Now %s" % [target.property_name, describe_buildings(target)])
+			else:
+				show_message("Player %d has no Forts to burn" % (player_id + 1))
+
+		"repair_tax":
+			var counts = gm.count_buildings(player_id)
+			var tax = counts["forts"] * GameManager.REPAIR_TAX_PER_FORT \
+				+ counts["palaces"] * GameManager.REPAIR_TAX_PER_PALACE
+			if tax > 0:
+				if await collect_payment(player_id, tax, -1, reason):
+					show_message("Player %d paid %d Gold for repairs" % [player_id + 1, tax])
+			else:
+				show_message("Player %d has nothing to repair" % (player_id + 1))
+
+	refresh_players_panel()
 
 func update_turn_label():
 	var player_id = GameManager.instance.active_player_index

@@ -44,11 +44,39 @@ func is_kingdom() -> bool:
 
 func set_kingdom_owner(player_id: int):
 	owner_id = player_id
+	if player_id == -1:
+		building_level = 0 # Buildings never survive a return to the Bank
 	queue_redraw()
 
-# Rings owned Kingdoms in the owner's color, and marks Safe Houses on the Ludo track
+# 0-4 = number of Forts, 5 = Palace
+var building_level: int = 0
+
+func set_building_level(level: int):
+	building_level = level
+	queue_redraw()
+
+# Rings owned Kingdoms in the owner's color, shows their Forts / Palace, and
+# marks Safe Houses on the Ludo track
 func _draw():
 	if is_safe and tile_type == TileType.LUDO:
 		draw_arc(Vector2.ZERO, 11, 0, TAU, 24, Color.WHITE, 2)
 	if owner_id >= 0:
 		draw_arc(Vector2.ZERO, 24, 0, TAU, 32, GameManager.PLAYER_COLORS[owner_id], 4)
+	draw_buildings()
+
+func draw_buildings():
+	var gold = Color(0.95, 0.75, 0.25)
+	var dark = Color(0.25, 0.1, 0.05)
+	if building_level == GameManager.PALACE_LEVEL:
+		# One larger crimson Palace with a gold dome
+		var palace = Rect2(-13, -44, 26, 14)
+		draw_rect(palace, Color(0.6, 0.08, 0.08))
+		draw_rect(palace, gold, false, 2)
+		draw_circle(Vector2(0, -46), 5, gold)
+	elif building_level > 0:
+		# A row of small gold Forts
+		var width = building_level * 10 - 2
+		for i in building_level:
+			var fort = Rect2(-width / 2.0 + i * 10, -40, 8, 8)
+			draw_rect(fort, gold)
+			draw_rect(fort, dark, false, 1)

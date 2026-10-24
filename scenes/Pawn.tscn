@@ -1,12 +1,10 @@
 [gd_scene format=3 uid="uid://cicykggtt3svg"]
 
-[ext_resource type="Texture2D" uid="uid://p4556uudin6w" path="res://assets/pawn1.jpeg" id="1_b4kb6"]
 [ext_resource type="Script" uid="uid://rn5tx7s3613n" path="res://scripts/Pawn.gd" id="2_pawn"]
 
 [node name="Pawn" type="Node2D" unique_id=1838398057]
 scale = Vector2(0.2, 0.2)
 script = ExtResource("2_pawn")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1308368029]
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("1_b4kb6")
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.9, 0.9)

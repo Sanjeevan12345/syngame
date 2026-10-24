@@ -1,0 +1,147 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/OpeningPage.gd" id="1_opening"]
+[ext_resource type="Texture2D" path="res://assets/opening_bg.png" id="2_bg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_normal"]
+content_margin_left = 24.0
+content_margin_top = 10.0
+content_margin_right = 24.0
+content_margin_bottom = 10.0
+bg_color = Color(0.42, 0.11, 0.07, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.85, 0.65, 0.25, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hover"]
+content_margin_left = 24.0
+content_margin_top = 10.0
+content_margin_right = 24.0
+content_margin_bottom = 10.0
+bg_color = Color(0.58, 0.17, 0.09, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.82, 0.4, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pressed"]
+content_margin_left = 24.0
+content_margin_top = 10.0
+content_margin_right = 24.0
+content_margin_bottom = 10.0
+bg_color = Color(0.85, 0.65, 0.25, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.42, 0.11, 0.07, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="Theme" id="Theme_opening"]
+Button/colors/font_color = Color(0.98, 0.9, 0.72, 1)
+Button/colors/font_hover_color = Color(1, 0.95, 0.8, 1)
+Button/colors/font_pressed_color = Color(0.3, 0.08, 0.04, 1)
+Button/colors/font_hover_pressed_color = Color(0.3, 0.08, 0.04, 1)
+Button/colors/font_focus_color = Color(0.98, 0.9, 0.72, 1)
+Button/font_sizes/font_size = 30
+Button/styles/normal = SubResource("StyleBoxFlat_normal")
+Button/styles/hover = SubResource("StyleBoxFlat_hover")
+Button/styles/pressed = SubResource("StyleBoxFlat_pressed")
+Button/styles/hover_pressed = SubResource("StyleBoxFlat_pressed")
+Button/styles/focus = SubResource("StyleBoxFlat_hover")
+Label/colors/font_color = Color(0.3, 0.12, 0.05, 1)
+Label/font_sizes/font_size = 34
+
+[node name="OpeningPage" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_opening")
+script = ExtResource("1_opening")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Scroll" type="Control" parent="."]
+layout_mode = 1
+anchor_left = 0.22
+anchor_top = 0.51
+anchor_right = 0.79
+anchor_bottom = 0.88
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Content" type="VBoxContainer" parent="Scroll"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 26
+alignment = 1
+
+[node name="ChooseLabel" type="Label" parent="Scroll/Content"]
+layout_mode = 2
+text = "Choose the number of kings"
+horizontal_alignment = 1
+
+[node name="PlayerChoices" type="HBoxContainer" parent="Scroll/Content"]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="Players2" type="Button" parent="Scroll/Content/PlayerChoices"]
+layout_mode = 2
+text = "2 Players"
+
+[node name="Players3" type="Button" parent="Scroll/Content/PlayerChoices"]
+layout_mode = 2
+text = "3 Players"
+
+[node name="Players4" type="Button" parent="Scroll/Content/PlayerChoices"]
+layout_mode = 2
+text = "4 Players"
+
+[node name="StartButton" type="Button" parent="Scroll/Content"]
+custom_minimum_size = Vector2(420, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 40
+text = "Begin the Siege"
+
+[node name="QuitButton" type="Button" parent="Scroll/Content"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 24
+text = "Quit"

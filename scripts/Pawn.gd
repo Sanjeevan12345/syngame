@@ -57,24 +57,95 @@ func reset_to_start(start_node: BoardNode):
 	divert_at_gate = false
 	set_initial_node(start_node)
 
-@onready var sprite: Sprite2D = $Sprite2D
+# Animated character art: each sheet is a 4x4 grid of 400x400 frames.
+# "idle" and "move" come from the moving sheet (rows 1-2 standing, rows 3-4
+# walking); "fight" is the sword-swing part of the fighting sheet.
+const SHEET_COLUMNS: int = 4
+const FRAME_SIZE: int = 400
+const FRAME_INSET: int = 6 # Skips the faint grid lines drawn between frames
+const CHARACTERS = [
+	{
+		"moving": preload("res://assets/pawn1_moving.png"),
+		"fighting": preload("res://assets/pawn1_fighting.png"),
+		"fight_frames": [8, 9, 10, 11, 12, 13, 14, 15],
+	},
+	{
+		"moving": preload("res://assets/pawn2_moving.png"),
+		"fighting": preload("res://assets/pawn2_fighting.png"),
+		"fight_frames": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+	},
+]
+const IDLE_FRAMES = [0, 1, 2, 3, 4, 5, 6, 7]
+const MOVE_FRAMES = [8, 9, 10, 11, 12, 13, 14, 15]
+const SPRITE_SCALE: float = 0.9
+
+# SpriteFrames are built once per character and shared by every pawn using it
+static var frames_cache: Dictionary = {}
+
+@export var character: int = 0 # Index into CHARACTERS; set before the pawn enters the tree
+var player_color: Color = Color.WHITE # Ring drawn under the pawn's feet
+
+@onready var sprite: AnimatedSprite2D = $Sprite
 var pulse_tween: Tween = null
+
+func _ready():
+	sprite.sprite_frames = get_character_frames(character)
+	sprite.scale = Vector2.ONE * SPRITE_SCALE
+	sprite.play("idle")
+
+static func get_character_frames(index: int) -> SpriteFrames:
+	if frames_cache.has(index):
+		return frames_cache[index]
+	var sheets = CHARACTERS[index]
+	var frames = SpriteFrames.new()
+	frames.remove_animation("default")
+	add_sheet_animation(frames, "idle", sheets["moving"], IDLE_FRAMES, 6.0, true)
+	add_sheet_animation(frames, "move", sheets["moving"], MOVE_FRAMES, 12.0, true)
+	add_sheet_animation(frames, "fight", sheets["fighting"], sheets["fight_frames"], 14.0, false)
+	frames_cache[index] = frames
+	return frames
+
+static func add_sheet_animation(frames: SpriteFrames, anim: String, sheet: Texture2D, indices: Array, fps: float, loop: bool):
+	frames.add_animation(anim)
+	frames.set_animation_speed(anim, fps)
+	frames.set_animation_loop(anim, loop)
+	for i in indices:
+		var atlas = AtlasTexture.new()
+		atlas.atlas = sheet
+		atlas.region = Rect2(
+			(i % SHEET_COLUMNS) * FRAME_SIZE + FRAME_INSET,
+			(i / SHEET_COLUMNS) * FRAME_SIZE + FRAME_INSET,
+			FRAME_SIZE - FRAME_INSET * 2, FRAME_SIZE - FRAME_INSET * 2)
+		frames.add_frame(anim, atlas)
+
+# Colored ring under the feet shows which player owns the pawn
+func _draw():
+	draw_set_transform(Vector2(0, FRAME_SIZE * SPRITE_SCALE * 0.45), 0, Vector2(1, 0.35))
+	draw_arc(Vector2.ZERO, 110, 0, TAU, 40, player_color, 28)
+
+# Swings the weapon once (used when capturing), then returns to standing
+func play_fight():
+	sprite.play("fight")
+	await sprite.animation_finished
+	sprite.play("idle")
 
 # Pulses the pawn while it can be clicked to move
 func set_selectable(selectable: bool):
 	if pulse_tween:
 		pulse_tween.kill()
 		pulse_tween = null
-	sprite.scale = Vector2(0.5, 0.5)
+	sprite.scale = Vector2.ONE * SPRITE_SCALE
 
 	if selectable:
 		pulse_tween = create_tween().set_loops()
-		pulse_tween.tween_property(sprite, "scale", Vector2(0.6, 0.6), 0.4)
-		pulse_tween.tween_property(sprite, "scale", Vector2(0.5, 0.5), 0.4)
+		pulse_tween.tween_property(sprite, "scale", Vector2.ONE * SPRITE_SCALE * 1.15, 0.4)
+		pulse_tween.tween_property(sprite, "scale", Vector2.ONE * SPRITE_SCALE, 0.4)
 
-# True if a global (board) position falls on this pawn's sprite
+# True if a global (board) position falls on this pawn's character. The figure
+# fills roughly the middle half of each frame's width.
 func contains_point(global_point: Vector2) -> bool:
-	return sprite.get_rect().has_point(sprite.to_local(global_point))
+	var size = Vector2(FRAME_SIZE, FRAME_SIZE) * Vector2(0.5, 0.95)
+	return Rect2(-size / 2, size).has_point(sprite.to_local(global_point))
 
 func is_on_gate() -> bool:
 	return path_state == PathState.OUTER \
@@ -113,6 +184,22 @@ func can_exit_here() -> bool:
 	if current_node == entry_node and ludo_steps == 0:
 		return false
 	return not is_at_lap_junction()
+
+# First Entry Gate ahead of this pawn on the outer ring
+func find_next_gate() -> BoardNode:
+	var node = current_node.next_node
+	while node != null and node != current_node:
+		if node.tile_type == BoardNode.TileType.ENTRY_GATE and node.branch_ludo_node != null:
+			return node
+		node = node.next_node
+	return null
+
+# Card effect: jump to a gate and enter the Ludo board there, as a normal entry would
+func enter_ludo_through(gate: BoardNode):
+	set_initial_node(gate)
+	divert_at_gate = true
+	await step_to(gate.branch_ludo_node)
+	sprite.play("idle")
 
 # Tiles from a node to Vaikuntha along a Home Stretch, counting the Vaikuntha tile itself
 func count_steps_to_vaikuntha(from: BoardNode) -> int:
@@ -173,6 +260,13 @@ func step_to(node: BoardNode):
 	if node.tile_type == BoardNode.TileType.THRONE:
 		path_state = PathState.VAIKUNTHA
 
+	# Walk toward the new tile, facing the direction of travel
+	var dx = node.global_position.x - current_node.global_position.x
+	if absf(dx) > 1.0:
+		sprite.flip_h = dx < 0
+	if sprite.animation != "move":
+		sprite.play("move")
+
 	current_node = node
 
 	# Smooth sliding animation over 0.25 seconds per space
@@ -221,4 +315,5 @@ func move_steps(steps: int, gate_chooser: Callable, lap_handler: Callable, exit_
 		if await exit_chooser.call(self, gate):
 			await step_to(gate)
 
+	sprite.play("idle")
 	emit_signal("movement_finished", self)

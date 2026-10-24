@@ -11,11 +11,10 @@ const HOLD_HEIGHT = 4.0
 const HOLD_LIMIT = 3.0
 const DIE_OFFSETS = [Vector3(-0.7, 0, 0), Vector3(0.7, 0, 0)]
 
-# After a roll the camera eases to this view over the centre of the container
+# Fixed camera for the whole game: over the centre of the container
 # (about 12 x 12 including its walls), framing the whole thing
 const OVERVIEW_CAMERA_POS = Vector3(0.0, 10.5, 3.0)
 const OVERVIEW_LOOK_AT = Vector3.ZERO
-const CAMERA_SPEED_SCALE = 0.75 # 1.0 = original camera animation speed
 
 # Throw speed comes from the last 0.1 s of mouse movement before release
 const THROW_SAMPLE_WINDOW = 0.1
@@ -26,10 +25,11 @@ const MAX_THROW_SPEED = 10.0
 
 var is_holding: bool = false
 var is_rolling: bool = false
-# The camera starts at its editor position; after the first roll it moves to the
-# overview and stays there for the rest of the game
-var should_zoom: bool = false
 var hold_samples: Array = [] # [time_seconds, world_position] pairs
+
+func _ready() -> void:
+	# The camera never moves: it starts and stays on the container overview
+	camera.global_transform = Transform3D(Basis(), OVERVIEW_CAMERA_POS).looking_at(OVERVIEW_LOOK_AT, Vector3.UP)
 
 # Picks up both sticks under the cursor. screen_pos is in this viewport's pixels.
 func begin_hold(screen_pos: Vector2) -> bool:
@@ -104,16 +104,7 @@ func calculate_score() -> void:
 		total = DOUBLE_ZERO_SCORE
 
 	print("Pasa landed on: ", faces, " | Score: ", total)
-	should_zoom = true
 	on_roll_complete(total)
-
-func _process(delta: float) -> void:
-	if should_zoom and camera:
-		# Settle into an overview centred on the container, showing all of it
-		camera.global_position = camera.global_position.lerp(OVERVIEW_CAMERA_POS, 5.0 * CAMERA_SPEED_SCALE * delta)
-
-		var look_target = camera.global_transform.looking_at(OVERVIEW_LOOK_AT, Vector3.UP)
-		camera.global_transform = camera.global_transform.interpolate_with(look_target, 9.0 * CAMERA_SPEED_SCALE * delta)
 
 func on_roll_complete(rolled_number: int) -> void:
 	# 1. Update GameManager state
