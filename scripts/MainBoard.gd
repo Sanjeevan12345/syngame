@@ -6,21 +6,24 @@ enum TurnState { WAIT_THROW, ROLLING, CHOOSE_PAWN, MOVING, GAME_OVER }
 
 @export_range(2, 4) var player_count: int = 2
 
-@onready var turn_label: Label = $UI_Layer/TurnLabel
-@onready var message_label: Label = $UI_Layer/MessageLabel
-@onready var players_panel: VBoxContainer = $UI_Layer/PlayersPanel
-@onready var buy_prompt: HBoxContainer = $UI_Layer/BuyPrompt
-@onready var buy_label: Label = $UI_Layer/BuyPrompt/BuyLabel
-@onready var buy_button: Button = $UI_Layer/BuyPrompt/BuyButton
-@onready var pass_button: Button = $UI_Layer/BuyPrompt/PassButton
-@onready var gate_prompt: HBoxContainer = $UI_Layer/GatePrompt
-@onready var gate_label: Label = $UI_Layer/GatePrompt/GateLabel
-@onready var enter_button: Button = $UI_Layer/GatePrompt/EnterButton
-@onready var stay_button: Button = $UI_Layer/GatePrompt/StayButton
-@onready var lap_prompt: HBoxContainer = $UI_Layer/LapPrompt
-@onready var lap_label: Label = $UI_Layer/LapPrompt/LapLabel
-@onready var loop_button: Button = $UI_Layer/LapPrompt/LoopButton
-@onready var exit_button: Button = $UI_Layer/LapPrompt/ExitButton
+@onready var ui_root: Control = %UIRoot
+@onready var turn_label: Label = %TurnLabel
+@onready var message_label: Label = %MessageLabel
+@onready var message_scroll: ScrollContainer = %MessageScroll
+@onready var players_panel: VBoxContainer = %PlayersPanel
+@onready var buy_prompt: Control = %BuyPrompt
+@onready var buy_label: Label = %BuyLabel
+@onready var buy_button: Button = %BuyButton
+@onready var pass_button: Button = %PassButton
+@onready var gate_prompt: Control = %GatePrompt
+@onready var gate_label: Label = %GateLabel
+@onready var enter_button: Button = %EnterButton
+@onready var stay_button: Button = %StayButton
+@onready var lap_prompt: Control = %LapPrompt
+@onready var lap_label: Label = %LapLabel
+@onready var loop_button: Button = %LoopButton
+@onready var exit_button: Button = %ExitButton
+@onready var shakuni_prompt: Control = %ShakuniPrompt
 @onready var dice_container: SubViewportContainer = $SubViewportContainer
 @onready var dice_viewport: SubViewport = $SubViewportContainer/SubViewport
 # Reference to your 3D Dice Scene
@@ -70,8 +73,7 @@ var debt_reason: String = ""
 # Set by an extra_turn card: the same player throws again after this move
 var extra_turn_pending: bool = false
 
-# Shakuni card picker, built in code: one button per possible Pasa score
-var shakuni_prompt: HBoxContainer
+# Shakuni card picker: one button per possible Pasa score, added in code
 signal shakuni_chosen(value: int)
 
 func _ready():
@@ -127,40 +129,71 @@ func spawn_pawns():
 			squad.append(pawn)
 		players_pawns.append(squad)
 
-# One line per player showing their gold, Kingdoms, color sets and kills,
-# with a Sell button to sell Kingdoms back to the Bank at any time
+# One orange scroll listing every player: a line each with their gold, Kingdoms,
+# color sets and kills, plus Build and Sell buttons (Sell works at any time).
+# The scroll grows with the player count; long lines scroll sideways.
 func build_players_panel():
+	var scroll_art = ScaledPanel.new()
+	scroll_art.art = ScaledPanel.Art.SCROLL_ORANGE
+	players_panel.add_child(scroll_art)
+
+	var rows = VBoxContainer.new()
+	rows.add_theme_constant_override("separation", 12)
+	scroll_art.add_child(rows)
+	# Padding keeps the first line below the gem and the last clear of the edge
+	var top_pad = Control.new()
+	top_pad.custom_minimum_size = Vector2(0, 16)
+	rows.add_child(top_pad)
+
 	for player_id in player_count:
 		var row = HBoxContainer.new()
-		players_panel.add_child(row)
+		row.add_theme_constant_override("separation", 6)
+		rows.add_child(row)
 
-		var label = Label.new()
-		label.add_theme_font_size_override("font_size", 18)
-		label.modulate = GameManager.PLAYER_COLORS[player_id]
-		row.add_child(label)
+		var text_scroll = ScrollContainer.new()
+		text_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		text_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+		text_scroll.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		row.add_child(text_scroll)
+
+		var label = RichTextLabel.new()
+		label.bbcode_enabled = true
+		label.fit_content = true
+		label.autowrap_mode = TextServer.AUTOWRAP_OFF
+		label.scroll_active = false
+		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		text_scroll.add_child(label)
 		player_labels.append(label)
 
 		var build = Button.new()
-		build.text = "Build"
+		build.text = "BUILD"
+		build.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		build.pressed.connect(open_build_panel.bind(player_id))
 		row.add_child(build)
 		build_buttons.append(build)
 
 		var sell = Button.new()
-		sell.text = "Sell"
+		sell.text = "SELL"
+		sell.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		sell.pressed.connect(open_sell_panel.bind(player_id))
 		row.add_child(sell)
 		sell_buttons.append(sell)
+	var bottom_pad = Control.new()
+	bottom_pad.custom_minimum_size = Vector2(0, 12)
+	rows.add_child(bottom_pad)
 	refresh_players_panel()
 
 func refresh_players_panel():
 	var gm = GameManager.instance
 	for player_id in player_count:
+		# Player colours are darkened so they stay readable on the parchment
+		var tag = "[color=#%s]P%d:[/color] " % [
+			GameManager.PLAYER_COLORS[player_id].darkened(0.45).to_html(false), player_id + 1]
 		if gm.player_eliminated[player_id]:
-			player_labels[player_id].text = "Player %d:  BANKRUPT" % (player_id + 1)
+			player_labels[player_id].text = tag + "BANKRUPT"
 		else:
-			player_labels[player_id].text = "P%d: %d Gold | %d Kingdoms | %d/%d Sets | %d/%d Kills | %d/%d Vaikuntha" % [
-				player_id + 1, gm.player_suvarnas[player_id], gm.player_kingdoms[player_id].size(),
+			player_labels[player_id].text = tag + "%d Gold | %d Kingdoms | %d/%d Sets | %d/%d Kills | %d/%d Vaikuntha" % [
+				gm.player_suvarnas[player_id], gm.player_kingdoms[player_id].size(),
 				gm.count_color_sets(player_id), GameManager.HOME_STRETCH_SETS_REQUIRED,
 				gm.player_kills[player_id], GameManager.HOME_STRETCH_KILLS_REQUIRED,
 				count_pawns_in_vaikuntha(player_id), GameManager.PAWNS_PER_PLAYER]
@@ -187,14 +220,15 @@ func can_open_build(player_id: int) -> bool:
 func build_build_panel():
 	build_panel = PanelContainer.new()
 	build_panel.visible = false
-	build_panel.position = Vector2(330, 260)
-	build_panel.custom_minimum_size = Vector2(460, 0)
-	$UI_Layer.add_child(build_panel)
+	build_panel.position = Vector2(300, 240)
+	build_panel.custom_minimum_size = Vector2(520, 0)
+	ui_root.add_child(build_panel)
 
 	var box = VBoxContainer.new()
 	build_panel.add_child(box)
 
 	build_title = Label.new()
+	build_title.theme_type_variation = &"ParchmentLabel"
 	build_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	build_title.custom_minimum_size = Vector2(440, 0)
 	box.add_child(build_title)
@@ -270,14 +304,15 @@ func can_sell(player_id: int) -> bool:
 func build_sell_panel():
 	sell_panel = PanelContainer.new()
 	sell_panel.visible = false
-	sell_panel.position = Vector2(330, 260)
-	sell_panel.custom_minimum_size = Vector2(460, 0)
-	$UI_Layer.add_child(sell_panel)
+	sell_panel.position = Vector2(300, 240)
+	sell_panel.custom_minimum_size = Vector2(520, 0)
+	ui_root.add_child(sell_panel)
 
 	var box = VBoxContainer.new()
 	sell_panel.add_child(box)
 
 	sell_title = Label.new()
+	sell_title.theme_type_variation = &"ParchmentLabel"
 	sell_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	sell_title.custom_minimum_size = Vector2(440, 0)
 	box.add_child(sell_title)
@@ -358,6 +393,9 @@ func show_message(text: String):
 	if message_label.text != "":
 		message_label.text += "\n"
 	message_label.text += text
+	# Keep the newest line in view once the chronicle overflows
+	await get_tree().process_frame
+	message_scroll.scroll_vertical = int(message_scroll.get_v_scroll_bar().max_value)
 
 # Drag inside the dice view to pick up the sticks, release to throw them
 func _on_dice_area_input(event: InputEvent):
@@ -671,7 +709,6 @@ func declare_winner(player_id: int, reason: String):
 	state = TurnState.GAME_OVER
 	sell_panel.visible = false
 	turn_label.text = "Player %d %s and WINS!" % [player_id + 1, reason]
-	turn_label.modulate = GameManager.PLAYER_COLORS[player_id]
 	refresh_players_panel()
 
 func switch_turn():
@@ -689,7 +726,6 @@ func begin_turn():
 		gm.player_skip_turns[player_id] -= 1
 		state = TurnState.MOVING
 		turn_label.text = "Player %d skips this turn" % (player_id + 1)
-		turn_label.modulate = GameManager.PLAYER_COLORS[player_id]
 		show_message("Player %d skips this turn" % (player_id + 1))
 		refresh_players_panel()
 		await get_tree().create_timer(1.5).timeout
@@ -701,7 +737,6 @@ func begin_turn():
 		refresh_players_panel()
 		state = TurnState.ROLLING # Blocks throwing the sticks
 		turn_label.text = "Player %d - Shakuni's dice: choose your roll" % (player_id + 1)
-		turn_label.modulate = GameManager.PLAYER_COLORS[player_id]
 		shakuni_prompt.visible = true
 		var value: int = await shakuni_chosen
 		shakuni_prompt.visible = false
@@ -713,21 +748,17 @@ func begin_turn():
 	update_turn_label()
 
 func build_shakuni_prompt():
-	shakuni_prompt = HBoxContainer.new()
-	shakuni_prompt.visible = false
-	shakuni_prompt.position = Vector2(1140, 445)
-	$UI_Layer.add_child(shakuni_prompt)
-
+	var row = %ShakuniRow
 	var label = Label.new()
 	label.text = "Shakuni's dice:"
-	shakuni_prompt.add_child(label)
+	row.add_child(label)
 
 	for value in GameManager.PASA_SCORES:
 		var button = Button.new()
 		button.text = str(value)
 		button.custom_minimum_size = Vector2(44, 0)
 		button.pressed.connect(func(): shakuni_chosen.emit(value))
-		shakuni_prompt.add_child(button)
+		row.add_child(button)
 
 # Applies a Dharma/Adharma card drawn by this pawn's player
 func apply_card(pawn: Pawn, card: Dictionary, reason: String):
@@ -816,4 +847,3 @@ func apply_card(pawn: Pawn, card: Dictionary, reason: String):
 func update_turn_label():
 	var player_id = GameManager.instance.active_player_index
 	turn_label.text = "Player %d - drag and throw the sticks" % (player_id + 1)
-	turn_label.modulate = GameManager.PLAYER_COLORS[player_id]

@@ -27,9 +27,48 @@ var is_holding: bool = false
 var is_rolling: bool = false
 var hold_samples: Array = [] # [time_seconds, world_position] pairs
 
+# Dice-roll sound effects; one random clip plays when the sticks land in the container
+const LANDING_SOUNDS = [
+	preload("res://assets/SFXs/dice roll1.mp3"),
+	preload("res://assets/SFXs/dice roll2.mp3"),
+	preload("res://assets/SFXs/dice roll3.mp3"),
+	preload("res://assets/SFXs/dice roll4.mp3"),
+	preload("res://assets/SFXs/dice roll5.mp3"),
+	preload("res://assets/SFXs/dice roll6.mp3"),
+	preload("res://assets/SFXs/dice roll7.mp3"),
+	preload("res://assets/SFXs/dice roll8.mp3"),
+	preload("res://assets/SFXs/dice roll9.mp3"),
+]
+# Each clip opens with silence before its first hit (measured, in seconds). Playback
+# starts LANDING_PREROLL before that hit so the sound lands with the impact.
+const LANDING_SOUND_ONSETS = [0.27, 0.50, 0.46, 0.55, 0.34, 0.44, 0.25, 0.27, 0.42]
+const LANDING_PREROLL = 0.02
+var landing_player: AudioStreamPlayer
+var landing_sound_played: bool = false # Once per throw
+var last_landing_sound: int = -1
+
 func _ready() -> void:
 	# The camera never moves: it starts and stays on the container overview
 	camera.global_transform = Transform3D(Basis(), OVERVIEW_CAMERA_POS).looking_at(OVERVIEW_LOOK_AT, Vector3.UP)
+
+	landing_player = AudioStreamPlayer.new()
+	add_child(landing_player)
+	for die in dice:
+		die.body_entered.connect(_on_die_body_entered)
+
+# Plays one random dice-roll clip the instant a thrown stick first hits the
+# container, skipping the clip's silent lead-in so the hit is heard right away.
+func _on_die_body_entered(body: Node) -> void:
+	if not is_rolling or landing_sound_played or not body is StaticBody3D:
+		return
+	landing_sound_played = true
+
+	# Never the same clip twice in a row
+	var choices = range(LANDING_SOUNDS.size()).filter(func(i): return i != last_landing_sound)
+	last_landing_sound = choices.pick_random()
+	landing_player.stream = LANDING_SOUNDS[last_landing_sound]
+	landing_player.pitch_scale = randf_range(0.95, 1.05)
+	landing_player.play(maxf(LANDING_SOUND_ONSETS[last_landing_sound] - LANDING_PREROLL, 0.0))
 
 # Picks up both sticks under the cursor. screen_pos is in this viewport's pixels.
 func begin_hold(screen_pos: Vector2) -> bool:
@@ -78,6 +117,7 @@ func release_hold() -> void:
 	velocity.y = -2.0
 
 	is_rolling = true
+	landing_sound_played = false
 	for die in dice:
 		die.release(velocity)
 

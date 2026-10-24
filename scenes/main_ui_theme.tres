@@ -1,0 +1,174 @@
+[gd_resource type="Theme" format=3 uid="uid://cmr3cma0mfyg5"]
+
+[ext_resource type="Texture2D" uid="uid://bii0ne0t564b2" path="res://assets/Main Screen UI Assets/paper_asset.png" id="1_paper"]
+[ext_resource type="FontFile" uid="uid://bga6reqm58fda" path="res://assets/Fonts/CinzelDecorative-Bold.ttf" id="2_cinzel"]
+
+[sub_resource type="StyleBoxFlat" id="Button_disabled"]
+content_margin_left = 10.0
+content_margin_top = 3.0
+content_margin_right = 10.0
+content_margin_bottom = 3.0
+bg_color = Color(0.27, 0.22, 0.18, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.48, 0.42, 0.33, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxEmpty" id="Empty"]
+
+[sub_resource type="StyleBoxFlat" id="Button_hover"]
+content_margin_left = 10.0
+content_margin_top = 3.0
+content_margin_right = 10.0
+content_margin_bottom = 3.0
+bg_color = Color(0.5, 0.29, 0.13, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.95, 0.78, 0.42, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 2
+
+[sub_resource type="StyleBoxFlat" id="Button_normal"]
+content_margin_left = 10.0
+content_margin_top = 3.0
+content_margin_right = 10.0
+content_margin_bottom = 3.0
+bg_color = Color(0.36, 0.2, 0.09, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.79, 0.62, 0.3, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 2
+
+[sub_resource type="StyleBoxFlat" id="Button_pressed"]
+content_margin_left = 10.0
+content_margin_top = 4.0
+content_margin_right = 10.0
+content_margin_bottom = 2.0
+bg_color = Color(0.24, 0.13, 0.06, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.79, 0.62, 0.3, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="Scroll_grabber"]
+bg_color = Color(0.45, 0.27, 0.12, 0.85)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="Scroll_grabber_hover"]
+bg_color = Color(0.62, 0.38, 0.16, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="Scroll_track"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.25, 0.15, 0.07, 0.25)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="Field"]
+content_margin_left = 8.0
+content_margin_top = 2.0
+content_margin_right = 8.0
+content_margin_bottom = 2.0
+bg_color = Color(0.12, 0.08, 0.05, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.55, 0.42, 0.22, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxTexture" id="Popup_paper"]
+content_margin_left = 34.0
+content_margin_top = 28.0
+content_margin_right = 34.0
+content_margin_bottom = 28.0
+texture = ExtResource("1_paper")
+texture_margin_left = 80.0
+texture_margin_top = 80.0
+texture_margin_right = 80.0
+texture_margin_bottom = 80.0
+region_rect = Rect2(360, 48, 2032, 1016)
+
+[resource]
+default_font = ExtResource("2_cinzel")
+default_font_size = 18
+Button/colors/font_color = Color(0.96, 0.84, 0.55, 1)
+Button/colors/font_disabled_color = Color(0.62, 0.56, 0.47, 1)
+Button/colors/font_focus_color = Color(0.96, 0.84, 0.55, 1)
+Button/colors/font_hover_color = Color(1, 0.93, 0.7, 1)
+Button/colors/font_pressed_color = Color(0.9, 0.76, 0.46, 1)
+Button/font_sizes/font_size = 15
+Button/styles/disabled = SubResource("Button_disabled")
+Button/styles/focus = SubResource("Empty")
+Button/styles/hover = SubResource("Button_hover")
+Button/styles/normal = SubResource("Button_normal")
+Button/styles/pressed = SubResource("Button_pressed")
+CheckButton/colors/font_color = Color(0.96, 0.84, 0.55, 1)
+CheckButton/colors/font_hover_color = Color(1, 0.93, 0.7, 1)
+CheckButton/colors/font_pressed_color = Color(0.96, 0.84, 0.55, 1)
+CheckButton/font_sizes/font_size = 22
+CheckButton/styles/focus = SubResource("Empty")
+CheckButton/styles/hover = SubResource("Empty")
+CheckButton/styles/hover_pressed = SubResource("Empty")
+CheckButton/styles/normal = SubResource("Empty")
+CheckButton/styles/pressed = SubResource("Empty")
+HScrollBar/styles/grabber = SubResource("Scroll_grabber")
+HScrollBar/styles/grabber_highlight = SubResource("Scroll_grabber_hover")
+HScrollBar/styles/grabber_pressed = SubResource("Scroll_grabber_hover")
+HScrollBar/styles/scroll = SubResource("Scroll_track")
+HScrollBar/styles/scroll_focus = SubResource("Scroll_track")
+Label/colors/font_color = Color(0.98, 0.87, 0.6, 1)
+Label/colors/font_outline_color = Color(0.12, 0.06, 0.02, 1)
+Label/constants/outline_size = 4
+LineEdit/colors/font_color = Color(0.98, 0.9, 0.7, 1)
+LineEdit/font_sizes/font_size = 20
+LineEdit/styles/focus = SubResource("Empty")
+LineEdit/styles/normal = SubResource("Field")
+PanelContainer/styles/panel = SubResource("Popup_paper")
+ParchmentLabel/base_type = &"Label"
+ParchmentLabel/colors/font_color = Color(0.2, 0.11, 0.04, 1)
+ParchmentLabel/constants/outline_size = 0
+RichTextLabel/colors/default_color = Color(0.2, 0.11, 0.04, 1)
+RichTextLabel/font_sizes/normal_font_size = 14
+VScrollBar/styles/grabber = SubResource("Scroll_grabber")
+VScrollBar/styles/grabber_highlight = SubResource("Scroll_grabber_hover")
+VScrollBar/styles/grabber_pressed = SubResource("Scroll_grabber_hover")
+VScrollBar/styles/scroll = SubResource("Scroll_track")
+VScrollBar/styles/scroll_focus = SubResource("Scroll_track")

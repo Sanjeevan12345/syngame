@@ -17,11 +17,9 @@ size = Vector3(1.1, 6, 12)
 script = ExtResource("2_roller")
 
 [node name="DiceContainer" parent="." unique_id=502259911 instance=ExtResource("3_container")]
-transform = Transform3D(6.4395447, 0, -0.07828104, 0, 8.102921, 0, 0.08846274, 0, 5.6983795, 0, -14.316521, -0.8008919)
-visible = false
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0.258, 0)
 
 [node name="ContainerCollision" type="StaticBody3D" parent="." unique_id=1807384043]
-transform = Transform3D(1.6192122, 0, -0.04186226, 0, 2.0257301, 0, 0.048004303, 0, 1.4120377, 0, -7.121954, -0.8008919)
 
 [node name="Floor" type="CollisionShape3D" parent="ContainerCollision" unique_id=1702530396]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
@@ -50,7 +48,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7, 0.3, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0.3, 0)
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1935514891]
-transform = Transform3D(1, 0, 0, 0, 0.2747, 0.9615, 0, -0.9615, 0.2747, 0, 10.5, 3)
+transform = Transform3D(-0.7506619, -0.42377812, 0.5068716, 0, 0.7671892, 0.64142084, -0.66068655, 0.4814902, -0.5758997, 10.018115, 13.185651, -12.037002)
 current = true
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1885800893]

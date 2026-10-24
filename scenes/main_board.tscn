@@ -5,8 +5,12 @@
 [ext_resource type="Script" uid="uid://c7etm46sg6rlo" path="res://scripts/MainBoard.gd" id="1_rymyb"]
 [ext_resource type="Script" uid="uid://bcg2qnmvfw742" path="res://scenes/monopoly_nodes.gd" id="3_382s8"]
 [ext_resource type="PackedScene" uid="uid://dq42mro2rtvmp" path="res://scenes/dice_main.tscn" id="6_oj5fh"]
-[ext_resource type="Texture2D" uid="uid://dy8g5scu67o3o" path="res://assets/Theme ui 1.png" id="7_382s8"]
 [ext_resource type="Script" uid="uid://cakk8j6e8nyc2" path="res://scripts/DevMode.gd" id="7_devmode"]
+[ext_resource type="Theme" uid="uid://cmr3cma0mfyg5" path="res://scenes/main_ui_theme.tres" id="8_uitheme"]
+[ext_resource type="Script" uid="uid://c7sna5k3dye61" path="res://scripts/ScaledPanel.gd" id="9_scaledpanel"]
+[ext_resource type="Texture2D" uid="uid://ckofgifyinatu" path="res://assets/BG Main UI.jpeg" id="9_xr5mr"]
+[ext_resource type="PackedScene" path="res://scenes/fire_sparks.tscn" id="10_firesparks"]
+[ext_resource type="Texture2D" uid="uid://px8yjoohdcua" path="res://assets/Board Bg (2).jpeg" id="11_pswje"]
 
 [node name="MainBoard" type="Node2D" unique_id=356345126]
 script = ExtResource("1_rymyb")
@@ -20,6 +24,11 @@ scale = Vector2(0.6, 0.6)
 texture = ExtResource("1_fpjay")
 metadata/_tc_uuid = "5507380917958318684"
 metadata/_edit_lock_ = true
+
+[node name="BoardBg(2)" type="Sprite2D" parent="." unique_id=1283224415]
+position = Vector2(560, 536)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("11_pswje")
 
 [node name="BoardNodes" type="Node2D" parent="." unique_id=1964501668]
 metadata/_tc_uuid = "8982612854432545144"
@@ -1439,96 +1448,259 @@ base_rent = 0
 [node name="UI_Layer" type="CanvasLayer" parent="." unique_id=711087732]
 metadata/_tc_uuid = "6483076611961940841"
 
-[node name="GatePrompt" type="HBoxContainer" parent="UI_Layer" unique_id=428003648]
-visible = false
-offset_left = 1140.0
-offset_top = 445.0
-offset_right = 1790.0
-offset_bottom = 495.0
-alignment = 1
+[node name="UIRoot" type="Control" parent="UI_Layer" unique_id=1873402211]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("8_uitheme")
 
-[node name="GateLabel" type="Label" parent="UI_Layer/GatePrompt" unique_id=222446710]
+[node name="RightColumn" type="VBoxContainer" parent="UI_Layer/UIRoot" unique_id=1620935517]
+layout_mode = 0
+offset_left = 1110.0
+offset_top = 10.0
+offset_right = 1890.0
+offset_bottom = 562.0
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="PlayersPanel" type="VBoxContainer" parent="UI_Layer/UIRoot/RightColumn" unique_id=1556803134]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+mouse_filter = 2
+theme_override_constants/separation = 0
 
-[node name="EnterButton" type="Button" parent="UI_Layer/GatePrompt" unique_id=64291970]
+[node name="Chronicle" type="MarginContainer" parent="UI_Layer/UIRoot/RightColumn" unique_id=1077236144]
 layout_mode = 2
-text = "Enter Ludo board"
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/margin_left = 34
+theme_override_constants/margin_top = 27
+theme_override_constants/margin_right = 34
+theme_override_constants/margin_bottom = 27
+script = ExtResource("9_scaledpanel")
 
-[node name="StayButton" type="Button" parent="UI_Layer/GatePrompt" unique_id=1708799730]
+[node name="ChronicleBox" type="VBoxContainer" parent="UI_Layer/UIRoot/RightColumn/Chronicle" unique_id=1388912475]
 layout_mode = 2
-text = "Stay on outer ring"
+mouse_filter = 2
+theme_override_constants/separation = 2
 
-[node name="LapPrompt" type="HBoxContainer" parent="UI_Layer" unique_id=1435169643]
-visible = false
-offset_left = 1140.0
-offset_top = 445.0
-offset_right = 1790.0
-offset_bottom = 495.0
-alignment = 1
-
-[node name="LapLabel" type="Label" parent="UI_Layer/LapPrompt" unique_id=1928784958]
+[node name="ChronicleTitle" type="Label" parent="UI_Layer/UIRoot/RightColumn/Chronicle/ChronicleBox" unique_id=1735027420]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
-
-[node name="LoopButton" type="Button" parent="UI_Layer/LapPrompt" unique_id=404652408]
-layout_mode = 2
-text = "Loop again"
-
-[node name="ExitButton" type="Button" parent="UI_Layer/LapPrompt" unique_id=578551921]
-layout_mode = 2
-text = "Exit to outer ring"
-
-[node name="TurnLabel" type="Label" parent="UI_Layer" unique_id=869436228]
-offset_left = 1140.0
-offset_top = 400.0
-offset_right = 1790.0
-offset_bottom = 440.0
-theme_override_font_sizes/font_size = 28
-text = "Player 1's Turn"
+theme_type_variation = &"ParchmentLabel"
+theme_override_font_sizes/font_size = 26
+text = "Chronicle of War"
 horizontal_alignment = 1
 
-[node name="PlayersPanel" type="VBoxContainer" parent="UI_Layer" unique_id=1556803134]
-offset_left = 1140.0
-offset_top = 40.0
-offset_right = 1790.0
-offset_bottom = 240.0
+[node name="MessageScroll" type="ScrollContainer" parent="UI_Layer/UIRoot/RightColumn/Chronicle/ChronicleBox" unique_id=1213650370]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
 
-[node name="MessageLabel" type="Label" parent="UI_Layer" unique_id=1525784885]
-offset_left = 1140.0
-offset_top = 250.0
-offset_right = 1790.0
-offset_bottom = 390.0
-theme_override_font_sizes/font_size = 20
+[node name="MessageLabel" type="Label" parent="UI_Layer/UIRoot/RightColumn/Chronicle/ChronicleBox/MessageScroll" unique_id=1525784885]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"ParchmentLabel"
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
-[node name="BuyPrompt" type="HBoxContainer" parent="UI_Layer" unique_id=1840140772]
+[node name="TurnBanner" type="MarginContainer" parent="UI_Layer/UIRoot/RightColumn" unique_id=1946671027]
+custom_minimum_size = Vector2(0, 116)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 54
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 54
+theme_override_constants/margin_bottom = 24
+script = ExtResource("9_scaledpanel")
+art = 1
+art_scale = 0.27
+
+[node name="TurnScroll" type="ScrollContainer" parent="UI_Layer/UIRoot/RightColumn/TurnBanner" unique_id=1297615004]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="TurnLabel" type="Label" parent="UI_Layer/UIRoot/RightColumn/TurnBanner/TurnScroll" unique_id=869436228]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 25
+text = "Player 1's Turn"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="BuyPrompt" type="MarginContainer" parent="UI_Layer/UIRoot" unique_id=1840140772]
+unique_name_in_owner = true
 visible = false
-offset_left = 1140.0
-offset_top = 445.0
-offset_right = 1790.0
-offset_bottom = 495.0
+layout_mode = 0
+offset_left = 1110.0
+offset_top = 566.0
+offset_right = 1890.0
+offset_bottom = 636.0
+mouse_filter = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 18
+script = ExtResource("9_scaledpanel")
+art = 1
+
+[node name="BuyRow" type="HBoxContainer" parent="UI_Layer/UIRoot/BuyPrompt" unique_id=1219735801]
+layout_mode = 2
+
+[node name="BuyScroll" type="ScrollContainer" parent="UI_Layer/UIRoot/BuyPrompt/BuyRow" unique_id=1402296318]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_scroll_mode = 0
+
+[node name="BuyLabel" type="Label" parent="UI_Layer/UIRoot/BuyPrompt/BuyRow/BuyScroll" unique_id=1930589067]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 19
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="BuyButton" type="Button" parent="UI_Layer/UIRoot/BuyPrompt/BuyRow" unique_id=1707160417]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+text = "BUY"
+
+[node name="PassButton" type="Button" parent="UI_Layer/UIRoot/BuyPrompt/BuyRow" unique_id=1438113776]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+text = "PASS"
+
+[node name="GatePrompt" type="MarginContainer" parent="UI_Layer/UIRoot" unique_id=428003648]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 1110.0
+offset_top = 566.0
+offset_right = 1890.0
+offset_bottom = 636.0
+mouse_filter = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 18
+script = ExtResource("9_scaledpanel")
+art = 1
+
+[node name="GateRow" type="HBoxContainer" parent="UI_Layer/UIRoot/GatePrompt" unique_id=1666212043]
+layout_mode = 2
+
+[node name="GateScroll" type="ScrollContainer" parent="UI_Layer/UIRoot/GatePrompt/GateRow" unique_id=1559027128]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_scroll_mode = 0
+
+[node name="GateLabel" type="Label" parent="UI_Layer/UIRoot/GatePrompt/GateRow/GateScroll" unique_id=222446710]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 19
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="EnterButton" type="Button" parent="UI_Layer/UIRoot/GatePrompt/GateRow" unique_id=64291970]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+text = "Enter Ludo board"
+
+[node name="StayButton" type="Button" parent="UI_Layer/UIRoot/GatePrompt/GateRow" unique_id=1708799730]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+text = "Stay on outer ring"
+
+[node name="LapPrompt" type="MarginContainer" parent="UI_Layer/UIRoot" unique_id=1435169643]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 1110.0
+offset_top = 566.0
+offset_right = 1890.0
+offset_bottom = 636.0
+mouse_filter = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 18
+script = ExtResource("9_scaledpanel")
+art = 1
+
+[node name="LapRow" type="HBoxContainer" parent="UI_Layer/UIRoot/LapPrompt" unique_id=1325568409]
+layout_mode = 2
+
+[node name="LapScroll" type="ScrollContainer" parent="UI_Layer/UIRoot/LapPrompt/LapRow" unique_id=1792280646]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_scroll_mode = 0
+
+[node name="LapLabel" type="Label" parent="UI_Layer/UIRoot/LapPrompt/LapRow/LapScroll" unique_id=1928784958]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 19
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="LoopButton" type="Button" parent="UI_Layer/UIRoot/LapPrompt/LapRow" unique_id=404652408]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+text = "Loop again"
+
+[node name="ExitButton" type="Button" parent="UI_Layer/UIRoot/LapPrompt/LapRow" unique_id=578551921]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+text = "Exit to outer ring"
+
+[node name="ShakuniPrompt" type="MarginContainer" parent="UI_Layer/UIRoot" unique_id=1150283746]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 1110.0
+offset_top = 566.0
+offset_right = 1890.0
+offset_bottom = 636.0
+mouse_filter = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 18
+script = ExtResource("9_scaledpanel")
+art = 1
+
+[node name="ShakuniRow" type="HBoxContainer" parent="UI_Layer/UIRoot/ShakuniPrompt" unique_id=1871166203]
+unique_name_in_owner = true
+layout_mode = 2
 alignment = 1
-
-[node name="BuyLabel" type="Label" parent="UI_Layer/BuyPrompt" unique_id=1930589067]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-
-[node name="BuyButton" type="Button" parent="UI_Layer/BuyPrompt" unique_id=1707160417]
-layout_mode = 2
-text = "Buy"
-
-[node name="PassButton" type="Button" parent="UI_Layer/BuyPrompt" unique_id=1438113776]
-layout_mode = 2
-text = "Pass"
 
 [node name="Pawns" type="Node2D" parent="." unique_id=204447783]
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=1782796200]
-offset_left = 1133.0
-offset_top = 504.0
-offset_right = 1798.0
-offset_bottom = 1016.0
+offset_left = 1144.0
+offset_top = 568.0
+offset_right = 1856.0
+offset_bottom = 1080.0
 
 [node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=146400802]
 transparent_bg = true
@@ -1541,8 +1713,10 @@ render_target_update_mode = 4
 [node name="DevMode" type="CanvasLayer" parent="." unique_id=2052297783]
 script = ExtResource("7_devmode")
 
+[node name="FireSparks" parent="." unique_id=1493827160 instance=ExtResource("10_firesparks")]
+
 [node name="ThemeUi1" type="Sprite2D" parent="." unique_id=1431000743]
 z_index = -1
-position = Vector2(959.99994, 541.25)
-scale = Vector2(0.6962209, 0.70410156)
-texture = ExtResource("7_382s8")
+position = Vector2(956.50006, 539)
+scale = Vector2(1.2056252, 1.2206047)
+texture = ExtResource("9_xr5mr")

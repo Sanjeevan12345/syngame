@@ -91,6 +91,57 @@ texture = ExtResource("2_bg")
 expand_mode = 1
 stretch_mode = 6
 
+[node name="SettingsButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 26.0
+offset_right = 72.0
+offset_bottom = 76.0
+tooltip_text = "Settings"
+mouse_default_cursor_shape = 2
+flat = true
+
+[node name="SettingsPanel" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 30.0
+offset_top = 84.0
+offset_right = 430.0
+offset_bottom = 230.0
+
+[node name="Settings" type="VBoxContainer" parent="SettingsPanel"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="SettingsPanel/Settings"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.9, 0.72, 1)
+theme_override_font_sizes/font_size = 26
+text = "Settings"
+horizontal_alignment = 1
+
+[node name="MuteToggle" type="CheckButton" parent="SettingsPanel/Settings"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Mute music"
+
+[node name="VolumeRow" type="HBoxContainer" parent="SettingsPanel/Settings"]
+layout_mode = 2
+
+[node name="VolumeLabel" type="Label" parent="SettingsPanel/Settings/VolumeRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.9, 0.72, 1)
+theme_override_font_sizes/font_size = 22
+text = "Volume"
+
+[node name="VolumeSlider" type="HSlider" parent="SettingsPanel/Settings/VolumeRow"]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.01
+
 [node name="Scroll" type="Control" parent="."]
 layout_mode = 1
 anchor_left = 0.22

@@ -12,6 +12,11 @@ const FACE_DIRECTIONS = {
 var release_requested: bool = false
 var throw_velocity: Vector3 = Vector3.ZERO
 
+func _ready() -> void:
+	# Report collisions through body_entered so the roller can play the landing sound
+	contact_monitor = true
+	max_contacts_reported = 4
+
 # Straightens the stick along Z with a random roll so held sticks never overlap
 func pick_up() -> void:
 	freeze = true

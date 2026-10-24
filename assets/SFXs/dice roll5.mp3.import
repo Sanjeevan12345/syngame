@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://djyytxskussl"
+path="res://.godot/imported/dice roll5.mp3-3f18f50d14ef653caa1f3f074ccc7ded.mp3str"
+
+[deps]
+
+source_file="res://assets/SFXs/dice roll5.mp3"
+dest_files=["res://.godot/imported/dice roll5.mp3-3f18f50d14ef653caa1f3f074ccc7ded.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
