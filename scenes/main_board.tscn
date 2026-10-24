@@ -1,8 +1,7 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bwdmf74cdai1u"]
 
-[ext_resource type="Script" path="res://scripts/BoardNode.gd" id="1_ekdbr"]
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1nek4"]
+[ext_resource type="Script" uid="uid://cgnc10rpo27ie" path="res://scripts/BoardNode.gd" id="1_ekdbr"]
+[ext_resource type="Texture2D" uid="uid://brvfypa8nfe52" path="res://assets/Board BG.jpeg" id="1_fpjay"]
 
 [node name="MainBoard" type="Node2D" unique_id=356345126]
 metadata/_tc_uuid = "3517047614286243854"
@@ -11,9 +10,10 @@ metadata/scene_file_path = "res://scenes/main_board.tscn"
 [node name="BoardBackground" type="Sprite2D" parent="." unique_id=674835067]
 texture_filter = 2
 position = Vector2(560, 536)
-scale = Vector2(1.0839987, 1.0799987)
-texture = SubResource("CompressedTexture2D_1nek4")
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("1_fpjay")
 metadata/_tc_uuid = "5507380917958318684"
+metadata/_edit_lock_ = true
 
 [node name="BoardNodes" type="Node2D" parent="." unique_id=1964501668]
 metadata/_tc_uuid = "8982612854432545144"
@@ -22,51 +22,361 @@ metadata/_tc_uuid = "8982612854432545144"
 metadata/_tc_uuid = "4109953271334036021"
 
 [node name="Node_0" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1139784449]
-position = Vector2(931, 931)
+position = Vector2(960, 938)
 script = ExtResource("1_ekdbr")
 property_name = "Rajasuva Yajna"
+purchase_cost = 0
+base_rent = 0
 metadata/_tc_uuid = "1514249906844133189"
 
 [node name="Node_1" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1545759704]
-position = Vector2(917, 860)
+position = Vector2(963, 839)
 script = ExtResource("1_ekdbr")
-property_name = "Rajasuva Yajna"
+node_id = 1
+property_name = "Gandhara"
+purchase_cost = 400
 metadata/_tc_uuid = "4720102829908082635"
 
 [node name="Node_2" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1118745797]
-position = Vector2(948, 782)
+position = Vector2(963, 761)
 script = ExtResource("1_ekdbr")
-property_name = "Rajasuva Yajna"
+node_id = 2
+property_name = "Vana Daan"
+purchase_cost = 0
+base_rent = 0
 metadata/_tc_uuid = "7729795746827765746"
 
 [node name="Node_3" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1126072254]
-position = Vector2(914, 701)
+position = Vector2(966, 689)
 script = ExtResource("1_ekdbr")
-property_name = "Rajasuva Yajna"
+node_id = 3
+property_name = "Kosala"
+purchase_cost = 360
+base_rent = 40
 metadata/_tc_uuid = "1450594021979474534"
 
 [node name="Node_4" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=17341530]
-position = Vector2(914, 625)
+position = Vector2(969, 615)
 script = ExtResource("1_ekdbr")
-property_name = "Rajasuva Yajna"
+node_id = 4
+property_name = "Malava"
+purchase_cost = 340
+base_rent = 32
 metadata/_tc_uuid = "4192132565932335799"
 
 [node name="Node_5" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=911046556]
-position = Vector2(905, 539)
+position = Vector2(969, 536)
 script = ExtResource("1_ekdbr")
-property_name = "Rajasuva Yajna"
+node_id = 5
+tile_type = 1
+property_name = "Magadha gate"
+purchase_cost = 0
+base_rent = 0
 metadata/_tc_uuid = "4975538896274698514"
 
 [node name="Node_6" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1092582233]
-position = Vector2(914, 454)
+position = Vector2(974, 462)
 script = ExtResource("1_ekdbr")
-property_name = "Rajasuva Yajna"
+node_id = 6
+property_name = "Kalinga"
+purchase_cost = 320
+base_rent = 30
 metadata/_tc_uuid = "2232866640041692024"
 
 [node name="Node_7" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=547195179]
-position = Vector2(965, 381)
+position = Vector2(976, 384)
 script = ExtResource("1_ekdbr")
-property_name = "Rajasuva Yajna"
+node_id = 7
+property_name = "Yajna Dakshina"
+purchase_cost = 0
+base_rent = 0
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_8" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1854856809]
+position = Vector2(976, 309)
+script = ExtResource("1_ekdbr")
+node_id = 8
+property_name = "Anga"
+purchase_cost = 300
+base_rent = 28
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_9" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1884191658]
+position = Vector2(977, 232)
+script = ExtResource("1_ekdbr")
+node_id = 9
+property_name = "vanga"
+purchase_cost = 280
+base_rent = 26
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_10" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=271333353]
+position = Vector2(960, 134)
+script = ExtResource("1_ekdbr")
+node_id = 10
+property_name = "Hall of dice"
+purchase_cost = 0
+base_rent = 0
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_11" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=700003093]
+position = Vector2(859, 135)
+script = ExtResource("1_ekdbr")
+node_id = 11
+property_name = "Shurasena"
+purchase_cost = 260
+base_rent = 24
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_12" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1638224372]
+position = Vector2(787, 135)
+script = ExtResource("1_ekdbr")
+node_id = 12
+property_name = "Dharma"
+purchase_cost = 0
+base_rent = 0
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_13" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=649603616]
+position = Vector2(712, 132)
+script = ExtResource("1_ekdbr")
+node_id = 13
+property_name = "Kushal"
+purchase_cost = 240
+base_rent = 22
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_14" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=677985513]
+position = Vector2(641, 129)
+script = ExtResource("1_ekdbr")
+node_id = 14
+property_name = "Virata"
+purchase_cost = 220
+base_rent = 20
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_15" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=698299758]
+position = Vector2(563, 127)
+script = ExtResource("1_ekdbr")
+node_id = 15
+property_name = "Panchala"
+purchase_cost = 0
+base_rent = 0
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_16" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1224781312]
+position = Vector2(488, 133)
+script = ExtResource("1_ekdbr")
+node_id = 16
+property_name = "Kashi"
+base_rent = 18
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_17" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=548147071]
+position = Vector2(411, 132)
+script = ExtResource("1_ekdbr")
+node_id = 17
+property_name = "Swayamvara"
+purchase_cost = 0
+base_rent = 0
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_18" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1704257074]
+position = Vector2(332, 135)
+script = ExtResource("1_ekdbr")
+node_id = 18
+property_name = "Rajasva Kara"
+purchase_cost = 0
+base_rent = 0
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_19" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1139231426]
+position = Vector2(257, 132)
+script = ExtResource("1_ekdbr")
+node_id = 19
+property_name = "Kuru"
+purchase_cost = 180
+base_rent = 16
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_20" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1149830701]
+position = Vector2(163, 133)
+script = ExtResource("1_ekdbr")
+node_id = 20
+property_name = "DwarakaHeaven"
+purchase_cost = 0
+base_rent = 0
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_21" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1340182117]
+position = Vector2(159, 227)
+script = ExtResource("1_ekdbr")
+node_id = 21
+property_name = "Kamakya"
+purchase_cost = 160
+base_rent = 14
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_22" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=513009535]
+position = Vector2(158, 311)
+script = ExtResource("1_ekdbr")
+node_id = 22
+property_name = "Bahira"
+purchase_cost = 160
+base_rent = 14
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_23" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=305094801]
+position = Vector2(157, 385)
+script = ExtResource("1_ekdbr")
+node_id = 23
+property_name = "Gandhiva"
+purchase_cost = 0
+base_rent = 0
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_24" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=491645153]
+position = Vector2(156, 460)
+script = ExtResource("1_ekdbr")
+node_id = 24
+property_name = "Saurastra"
+purchase_cost = 140
+base_rent = 12
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_25" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1703649889]
+position = Vector2(160, 535)
+script = ExtResource("1_ekdbr")
+node_id = 25
+property_name = "Indraprastha"
+purchase_cost = 0
+base_rent = 0
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_26" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=890277302]
+position = Vector2(159, 610)
+script = ExtResource("1_ekdbr")
+node_id = 26
+property_name = "Sauvira"
+purchase_cost = 120
+base_rent = 10
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_27" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1599785065]
+position = Vector2(163, 689)
+script = ExtResource("1_ekdbr")
+node_id = 27
+property_name = "Kurukshetra"
+purchase_cost = 0
+base_rent = 0
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_28" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=265893388]
+position = Vector2(166, 764)
+script = ExtResource("1_ekdbr")
+node_id = 28
+property_name = "Adharma"
+purchase_cost = 0
+base_rent = 0
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_29" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=695243520]
+position = Vector2(166, 840)
+script = ExtResource("1_ekdbr")
+node_id = 29
+property_name = "Karusha"
+purchase_cost = 100
+base_rent = 8
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_30" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1970570365]
+position = Vector2(163, 938)
+script = ExtResource("1_ekdbr")
+node_id = 30
+property_name = "Kamvaka"
+purchase_cost = 0
+base_rent = 0
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_31" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1701010614]
+position = Vector2(257, 943)
+script = ExtResource("1_ekdbr")
+node_id = 31
+property_name = "Dhwaraka"
+purchase_cost = 100
+base_rent = 8
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_32" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=252566509]
+position = Vector2(331, 943)
+script = ExtResource("1_ekdbr")
+node_id = 32
+property_name = "Vidarbha"
+purchase_cost = 80
+base_rent = 6
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_33" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=2051666502]
+position = Vector2(411, 941)
+script = ExtResource("1_ekdbr")
+node_id = 33
+property_name = "Ashwamedha"
+purchase_cost = 0
+base_rent = 0
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_34" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=79588077]
+position = Vector2(484, 938)
+script = ExtResource("1_ekdbr")
+node_id = 34
+property_name = "MayaSabha"
+purchase_cost = 0
+base_rent = 0
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_35" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=546540499]
+position = Vector2(562, 938)
+script = ExtResource("1_ekdbr")
+node_id = 35
+property_name = "GandharaGate"
+purchase_cost = 0
+base_rent = 0
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_36" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1797493170]
+position = Vector2(638, 938)
+script = ExtResource("1_ekdbr")
+node_id = 36
+property_name = "AkshayaPatra"
+purchase_cost = 0
+base_rent = 0
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_37" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=2011788720]
+position = Vector2(714, 938)
+script = ExtResource("1_ekdbr")
+node_id = 37
+property_name = "Kekeya"
+purchase_cost = 60
+base_rent = 4
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_38" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=681403981]
+position = Vector2(791, 939)
+script = ExtResource("1_ekdbr")
+node_id = 38
+property_name = "Agyatavasa"
+purchase_cost = 0
+base_rent = 0
+metadata/_tc_uuid = "31702617195739913"
+
+[node name="Node_39" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=970114429]
+position = Vector2(867, 939)
+script = ExtResource("1_ekdbr")
+node_id = 39
+property_name = "Sarasavata"
+purchase_cost = 60
+base_rent = 4
 metadata/_tc_uuid = "31702617195739913"
 
 [node name="LudoNodes" type="Node2D" parent="BoardNodes" unique_id=316801073]
