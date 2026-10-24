@@ -1,11 +1,13 @@
 extends RigidBody3D
 
+signal dice_roll_finished(rolled_number: int)
+
 const FACE_DIRECTIONS = {
-	6: Vector3.UP,
-	5: Vector3.DOWN,
+	5: Vector3.UP,
+	6: Vector3.DOWN,
 	4: Vector3.LEFT,
-	3: Vector3.RIGHT,
-	2: Vector3.FORWARD,
+	2: Vector3.RIGHT,
+	3: Vector3.FORWARD,
 	1: Vector3.BACK
 }
 
@@ -16,9 +18,24 @@ var target_camera_pos: Vector3 = Vector3.ZERO
 var should_zoom: bool = false
 
 func _ready() -> void:
-	reset_requested = true
-	is_rolling = true
+	#reset_requested = true
+	#is_rolling = true
+	reset_requested = false
+	is_rolling = false
 	camera = get_viewport().get_camera_3d()
+	
+func trigger_roll() -> void:
+	if not is_rolling:
+		# 1. Wake the RigidBody from sleep mode
+		sleeping = false
+		
+		# 2. Lift the die slightly back up into the air before throwing
+		global_position = Vector3(global_position.x, 2.0, global_position.z)
+		
+		# 3. Set flags to trigger physics impulse in _integrate_forces
+		reset_requested = true
+		is_rolling = true
+		should_zoom = false
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	if reset_requested:
@@ -71,12 +88,13 @@ func calculate_winning_face() -> void:
 			highest_dot = dot
 			landed_number = face_value
 			
-	print("Dice landed swiftly on: ", landed_number)
+	print("Dice landed om : ", landed_number)
 	should_zoom = true
+	on_roll_complete(landed_number)
 	
-	
+
 # Inside your 3D Dice script after the roll finishes and number is determined
-func on_roll_complete(rolled_number: int):
+func on_roll_complete(rolled_number: int) :
 	# 1. Update GameManager state
 	GameManager.instance.current_dice_roll = rolled_number
 	GameManager.instance.is_waiting_for_input = false
