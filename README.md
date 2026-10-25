@@ -1,4 +1,6 @@
-Get our game at : https://snjvn.itch.io/vikuntha-vijaya 
+Get our game at : https://snjvn.itch.io/vikuntha-vijaya ( windows )
+
+Get our game at : https://snjvn.itch.io/vaikuntha-vijaya ( web )
 
 # The Siege of Vaikuntha
 
