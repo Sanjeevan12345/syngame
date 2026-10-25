@@ -19,8 +19,20 @@ func _ready():
 	player.stream = stream
 	add_child(player)
 	load_settings()
-	apply_settings()
+	start()
+
+const FADE_IN_TIME: float = 1.5
+const SILENT_DB: float = -40.0
+
+# Starts the track from the beginning, keeping the mute setting.
+# The intro video stops the music and calls this when it ends, fading it in.
+func start(fade_in: bool = false):
 	player.play()
+	apply_settings()
+	if fade_in:
+		var target_db = player.volume_db
+		player.volume_db = SILENT_DB
+		create_tween().tween_property(player, "volume_db", target_db, FADE_IN_TIME)
 
 func set_volume(value: float):
 	volume = clampf(value, 0.0, 1.0)

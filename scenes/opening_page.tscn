@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/OpeningPage.gd" id="1_opening"]
-[ext_resource type="Texture2D" path="res://assets/opening_bg.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://assets/opening_bg.jpeg" id="2_bg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_normal"]
 content_margin_left = 24.0
@@ -161,11 +161,6 @@ grow_vertical = 2
 theme_override_constants/separation = 26
 alignment = 1
 
-[node name="ChooseLabel" type="Label" parent="Scroll/Content"]
-layout_mode = 2
-text = "Choose the number of kings"
-horizontal_alignment = 1
-
 [node name="PlayerChoices" type="HBoxContainer" parent="Scroll/Content"]
 layout_mode = 2
 theme_override_constants/separation = 24
@@ -189,6 +184,13 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 40
 text = "Begin the Siege"
+
+[node name="ContinueButton" type="Button" parent="Scroll/Content"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 30
+text = "Continue Saga"
 
 [node name="QuitButton" type="Button" parent="Scroll/Content"]
 custom_minimum_size = Vector2(220, 0)

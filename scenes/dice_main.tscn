@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" path="res://scenes/pasa_die.tscn" id="1_pasa"]
 [ext_resource type="Script" uid="uid://crt7qkhf8krj3" path="res://scripts/pasa_dice_roller.gd" id="2_roller"]
-[ext_resource type="PackedScene" uid="uid://dx50kxmf5rtje" path="res://assets/dice_container.glb" id="3_container"]
+[ext_resource type="Script" path="res://scripts/DiceBox.gd" id="3_box"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
 size = Vector3(12, 1, 12)
@@ -16,8 +16,8 @@ size = Vector3(1.1, 6, 12)
 [node name="dice_main" type="Node3D" unique_id=319496564]
 script = ExtResource("2_roller")
 
-[node name="DiceContainer" parent="." unique_id=502259911 instance=ExtResource("3_container")]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0.258, 0)
+[node name="DiceBox" type="Node3D" parent="." unique_id=502259911]
+script = ExtResource("3_box")
 
 [node name="ContainerCollision" type="StaticBody3D" parent="." unique_id=1807384043]
 
@@ -50,6 +50,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0.3, 0)
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1935514891]
 transform = Transform3D(-0.7506619, -0.42377812, 0.5068716, 0, 0.7671892, 0.64142084, -0.66068655, 0.4814902, -0.5758997, 10.018115, 13.185651, -12.037002)
 current = true
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1885800893]
-transform = Transform3D(0.11938994, 0.6999892, 0.704103, 0.11702202, -0.7141533, 0.69013816, 0.9859269, 7.551027e-09, -0.16717692, 2.9886885, 5.602068, 0)

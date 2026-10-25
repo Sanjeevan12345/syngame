@@ -24,6 +24,7 @@ func _ready():
 
 	var bar = HBoxContainer.new()
 	bar.add_theme_constant_override("separation", 14)
+	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE # Spans the whole frame; let clicks reach Save / Load
 	frame.add_child(bar)
 
 	toggle_button = CheckButton.new()
@@ -33,6 +34,7 @@ func _ready():
 
 	dev_panel = HBoxContainer.new()
 	dev_panel.visible = false
+	dev_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	bar.add_child(dev_panel)
 
 	var label = Label.new()

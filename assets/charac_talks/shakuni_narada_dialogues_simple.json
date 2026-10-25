@@ -1,0 +1,152 @@
+[
+  {
+    "name": "Shakuni",
+    "when": "When the game starts",
+    "text": "Welcome, dear nephew! Come, sit. The dice are fair, the board is fair, and I am the fairest of them all. Sign here, and ignore the small print. And the large print."
+  },
+  {
+    "name": "Narada",
+    "when": "When the game starts",
+    "text": "Narayan Narayan! A new player! Let me give you a tip: trust nobody at this table. Especially the man with the dice. And also me. Especially me."
+  },
+  {
+    "name": "Shakuni",
+    "when": "When the player passes Rajasuya Yajna (Start) and collects coins",
+    "text": "Collecting your coins from the Rajasuya Yajna? Wonderful! Spend them quickly. Saving money only gives you time to think, and thinking has never helped anyone win against me."
+  },
+  {
+    "name": "Narada",
+    "when": "When the player buys a kingdom",
+    "text": "You bought a kingdom! Congratulations! Now everyone knows exactly where to land to ruin your day. I have already told them. You're welcome."
+  },
+  {
+    "name": "Shakuni",
+    "when": "When the player lands on Hall of Dice",
+    "text": "The Hall of Dice! My home ground. A little advice: bet big, believe in luck, and never ask why my dice roll the same number so often. It's called talent."
+  },
+  {
+    "name": "Narada",
+    "when": "When the player pays rent",
+    "text": "Paying rent again? Don't be sad. Think of it as a donation to a more successful ruler. Someone has to fund the fort, and it clearly isn't going to be you."
+  },
+  {
+    "name": "Shakuni",
+    "when": "When the player builds a fort",
+    "text": "A fort! Excellent strategy. Walls solve every problem, except the rent, the taxes, and the fact that I'm already inside."
+  },
+  {
+    "name": "Narada",
+    "when": "When the player lands on Kamyaka Forest (exile)",
+    "text": "Kamyaka Forest exile! Peace, fresh air, and nobody to bother you. Use this time to reflect on your decisions. Don't take too long though. The others are busy buying your kingdoms."
+  },
+  {
+    "name": "Shakuni",
+    "when": "When the player is running low on coins",
+    "text": "Running low on coins? No problem, I can lend you some. Interest is only slightly more than your entire kingdom. Think of it as a friendly family arrangement."
+  },
+  {
+    "name": "Narada",
+    "when": "When the player lands on Dwarka Haven",
+    "text": "Dwarka Haven! Krishna's neighborhood. Safe, peaceful, and for once I have nothing to say. Enjoy it. Silence is rare when I'm around."
+  },
+  {
+    "name": "Shakuni",
+    "when": "When the player draws a card",
+    "text": "Draw a card, dear player. Fate is such a lovely thing. Of course, fate has a very good relationship with me, so don't expect miracles."
+  },
+  {
+    "name": "Narada",
+    "when": "When a rival buys a kingdom",
+    "text": "Your rival just bought the kingdom you were saving up for. Did I whisper your plan in their ear? I would never. Okay, maybe once. Okay, twice."
+  },
+  {
+    "name": "Shakuni",
+    "when": "When the player proposes a trade or alliance",
+    "text": "A deal between friends! I love friends. They never read the contract carefully, and they always forgive me afterwards. Eventually. Probably."
+  },
+  {
+    "name": "Narada",
+    "when": "When two players form an alliance",
+    "text": "Two players have become allies! How touching. I give it three turns. I could make it two, if somebody asks nicely."
+  },
+  {
+    "name": "Shakuni",
+    "when": "When the player is in the lead",
+    "text": "You are winning? How alarming. Let me adjust the dice... I mean, let me congratulate you warmly. Pride comes before a fall. Preferably yours."
+  },
+  {
+    "name": "Narada",
+    "when": "When the player lands on Magadha",
+    "text": "Magadha! Home of Jarasandha, the king who got split in two and came back together. Learn from him: some problems come back, especially unpaid rent."
+  },
+  {
+    "name": "Shakuni",
+    "when": "When the player lands on Gandhara",
+    "text": "Gandhara, my beloved homeland! Free advice: stay as long as you like. The hospitality is excellent and the exit is surprisingly hard to find."
+  },
+  {
+    "name": "Narada",
+    "when": "When the player has a lot of coins",
+    "text": "So rich! So powerful! I'd tell you who is jealous of you, but then I'd have to tell them you know. And that's no fun. Actually, it is. Let me go."
+  },
+  {
+    "name": "Shakuni",
+    "when": "When the player goes bankrupt",
+    "text": "Lost everything? Splendid! A man with nothing has nothing left to lose, except his dignity, and honestly that went a few rounds ago. Care for another game?"
+  },
+  {
+    "name": "Narada",
+    "when": "When the game ends",
+    "text": "The game is over! My advice for next time: ignore everyone's advice, including mine, and especially Shakuni's. Narayan Narayan!"
+  },
+  {
+    "name": "Shakuni",
+    "when": "Randomly, at any time during the game (trash talk)",
+    "text": "You roll like a man who has never lost. Strange, because you haven't won either."
+  },
+  {
+    "name": "Narada",
+    "when": "Randomly, at any time during the game (trash talk)",
+    "text": "Everyone is talking about your strategy. They're laughing, but they are talking."
+  },
+  {
+    "name": "Shakuni",
+    "when": "Randomly, at any time during the game (trash talk)",
+    "text": "Take your time, dear player. Take all the time you want. I only need one good roll."
+  },
+  {
+    "name": "Narada",
+    "when": "Randomly, at any time during the game (trash talk)",
+    "text": "Your kingdoms are so poor, even the gossip about them is boring. And I can make anything interesting."
+  },
+  {
+    "name": "Shakuni",
+    "when": "Randomly, at any time during the game (trash talk)",
+    "text": "Even Yudhishthira lost his kingdom on my board. You are just trying to lose yours more slowly."
+  },
+  {
+    "name": "Narada",
+    "when": "Randomly, at any time during the game (trash talk)",
+    "text": "I have seen sages with more business sense than you, and they live on air."
+  },
+  {
+    "name": "Shakuni",
+    "when": "Randomly, at any time during the game (trash talk)",
+    "text": "Your luck is truly impressive. I have never seen anyone so consistently unlucky without my help."
+  },
+  {
+    "name": "Narada",
+    "when": "Randomly, at any time during the game (trash talk)",
+    "text": "Narayan Narayan! Is that your final move? Please say yes, I have already told everyone it was."
+  },
+  {
+    "name": "Shakuni",
+    "when": "Randomly, at any time during the game (trash talk)",
+    "text": "Don't worry about losing. Losing is just winning that is taking a very long route."
+  },
+  {
+    "name": "Narada",
+    "when": "Randomly, at any time during the game (trash talk)",
+    "text": "You play like a Kaurava with a Pandava budget. Nobody is sure who to feel sorry for."
+  }
+]

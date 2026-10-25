@@ -28,9 +28,21 @@ enum TileType { MONOPOLY, ENTRY_GATE, LUDO, SAFE_HAVEN, THRONE, TAX, CARD }
 @export_category("Combat")
 @export var is_safe: bool = false # Safe House: pawns here can't be captured
 
+# Ownership pennant per player (pawnNtag = player N). Each image is mostly
+# transparent, so only the pennant's visible region is drawn.
+const OWNER_TAGS = [
+	{"texture": preload("res://assets/ownership_tags/pawn1tag.png"), "region": Rect2(664, 468, 720, 1132)},
+	{"texture": preload("res://assets/ownership_tags/pawn2tag.png"), "region": Rect2(592, 367, 863, 1326)},
+	{"texture": preload("res://assets/ownership_tags/pawn3tag.png"), "region": Rect2(613, 399, 824, 1250)},
+	{"texture": preload("res://assets/ownership_tags/pawn4tag.png"), "region": Rect2(576, 463, 897, 1121)},
+]
+const OWNER_TAG_HEIGHT: float = 44.0
+
 func _ready():
 	if is_kingdom():
 		add_to_group("kingdoms")
+	# The tags are drawn far smaller than their source art
+	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 
 # Name for messages; unnamed Ludo track tiles fall back to a generic label
 func get_display_name() -> String:
@@ -55,14 +67,18 @@ func set_building_level(level: int):
 	building_level = level
 	queue_redraw()
 
-# Rings owned Kingdoms in the owner's color, shows their Forts / Palace, and
-# marks Safe Houses on the Ludo track
+# Flies the owner's pennant on owned Kingdoms and shows their Forts / Palace.
+# Safe Houses are marked in the board art itself.
 func _draw():
-	if is_safe and tile_type == TileType.LUDO:
-		draw_arc(Vector2.ZERO, 11, 0, TAU, 24, Color.WHITE, 2)
 	if owner_id >= 0:
-		draw_arc(Vector2.ZERO, 24, 0, TAU, 32, GameManager.PLAYER_COLORS[owner_id], 4)
+		draw_owner_tag()
 	draw_buildings()
+
+func draw_owner_tag():
+	var tag = OWNER_TAGS[owner_id % OWNER_TAGS.size()]
+	var region: Rect2 = tag.region
+	var size = Vector2(region.size.x / region.size.y * OWNER_TAG_HEIGHT, OWNER_TAG_HEIGHT)
+	draw_texture_rect_region(tag.texture, Rect2(-size / 2, size), region)
 
 func draw_buildings():
 	var gold = Color(0.95, 0.75, 0.25)

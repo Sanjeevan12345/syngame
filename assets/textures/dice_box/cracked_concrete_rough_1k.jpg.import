@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://berc2mj61ocaw"
-path="res://.godot/imported/opening_bg.png-ff459602cfb1680e1145712d4c1772a6.ctex"
+uid="uid://ri5heidh3nlp"
+path="res://.godot/imported/cracked_concrete_rough_1k.jpg-dd9a99250e3e8e727f7e92d7b9d04cb3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/opening_bg.png"
-dest_files=["res://.godot/imported/opening_bg.png-ff459602cfb1680e1145712d4c1772a6.ctex"]
+source_file="res://assets/textures/dice_box/cracked_concrete_rough_1k.jpg"
+dest_files=["res://.godot/imported/cracked_concrete_rough_1k.jpg-dd9a99250e3e8e727f7e92d7b9d04cb3.ctex"]
 
 [params]
 

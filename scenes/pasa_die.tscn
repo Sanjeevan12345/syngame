@@ -10,7 +10,9 @@ bounce = 0.3
 size = Vector3(0.6, 0.6, 3)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
-albedo_color = Color(0.5, 0.5, 0.5, 1)
+albedo_color = Color(0.42, 0.44, 0.48, 1)
+metallic = 0.75
+roughness = 0.35
 
 [sub_resource type="BoxMesh" id="BoxMesh_pasa"]
 material = SubResource("StandardMaterial3D_body")

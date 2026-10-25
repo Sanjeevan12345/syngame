@@ -12,6 +12,7 @@ var player_kingdoms: Array = [[], [], [], []] # Holds the BoardNodes owned by ea
 var player_eliminated: Array = [false, false, false, false] # True once a player goes bankrupt
 
 var selected_player_count: int = 0 # Set by the opening page; 0 = use MainBoard's own setting
+var pending_load: Dictionary = {} # Saved game the main board restores when it next starts
 
 var current_dice_roll: int = 0
 var is_waiting_for_input: bool = true
@@ -130,6 +131,41 @@ func setup_players(count: int):
 	draw_piles = [[], []]
 	forts_available = TOTAL_FORTS
 	palaces_available = TOTAL_PALACES
+
+# Saved-game data for everything the GameManager tracks except Kingdom lists,
+# which MainBoard rebuilds from each Kingdom's owner. Draw piles are stored as
+# card indices so a save survives edits to the card text.
+func export_state() -> Dictionary:
+	var piles = []
+	for deck in draw_piles.size():
+		piles.append(draw_piles[deck].map(func(card): return CARD_DECKS[deck].find(card)))
+	return {
+		"active_player": active_player_index,
+		"player_suvarnas": player_suvarnas.duplicate(),
+		"player_kills": player_kills.duplicate(),
+		"player_eliminated": player_eliminated.duplicate(),
+		"player_skip_turns": player_skip_turns.duplicate(),
+		"player_shakuni": player_shakuni.duplicate(),
+		"forts_available": forts_available,
+		"palaces_available": palaces_available,
+		"draw_piles": piles,
+	}
+
+# Restores export_state() data after setup_players(); JSON numbers come back as floats
+func import_state(data: Dictionary):
+	active_player_index = int(data.active_player)
+	player_suvarnas = data.player_suvarnas.map(func(v): return int(v))
+	player_kills = data.player_kills.map(func(v): return int(v))
+	player_eliminated = data.player_eliminated.map(func(v): return bool(v))
+	player_skip_turns = data.player_skip_turns.map(func(v): return int(v))
+	player_shakuni = data.player_shakuni.map(func(v): return bool(v))
+	forts_available = int(data.forts_available)
+	palaces_available = int(data.palaces_available)
+	draw_piles = [[], []]
+	for deck in draw_piles.size():
+		for index in data.draw_piles[deck]:
+			if int(index) >= 0 and int(index) < CARD_DECKS[deck].size():
+				draw_piles[deck].append(CARD_DECKS[deck][int(index)])
 
 func add_gold(player_id: int, amount: int):
 	player_suvarnas[player_id] += amount

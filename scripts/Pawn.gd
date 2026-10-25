@@ -47,6 +47,32 @@ func get_board_scale() -> Vector2:
 func get_board_offset() -> Vector2:
 	return visual_offset * (INNER_SCALE / OUTER_SCALE if is_on_inner_board() else 1.0)
 
+# Saved-game data; tiles are stored as paths relative to the board scene
+func export_state(board: Node) -> Dictionary:
+	var path_of = func(node): return str(board.get_path_to(node)) if node != null else ""
+	return {
+		"owner_id": owner_id,
+		"pawn_index": pawn_index,
+		"node": path_of.call(current_node),
+		"path_state": path_state,
+		"entry_node": path_of.call(entry_node),
+		"entry_gate": path_of.call(entry_gate),
+		"lap_route": lap_route,
+		"ludo_steps": ludo_steps,
+		"divert_at_gate": divert_at_gate,
+	}
+
+func import_state(data: Dictionary, board: Node):
+	var node_at = func(path): return board.get_node_or_null(path) if path != "" else null
+	path_state = int(data.path_state) as PathState
+	entry_node = node_at.call(data.entry_node)
+	entry_gate = node_at.call(data.entry_gate)
+	lap_route = int(data.lap_route) as LapRoute
+	ludo_steps = int(data.ludo_steps)
+	divert_at_gate = bool(data.divert_at_gate)
+	# Placed last: the inner / outer board scale depends on path_state
+	set_initial_node(node_at.call(data.node))
+
 # Sends a captured pawn back to Start; it has to re-enter through a gate
 func reset_to_start(start_node: BoardNode):
 	path_state = PathState.OUTER
@@ -58,6 +84,8 @@ func reset_to_start(start_node: BoardNode):
 	set_initial_node(start_node)
 
 # Animated character art: each sheet is a 4x4 grid of 400x400 frames.
+# Larger 2048px sheets are imported at 1600px (process/size_limit in their
+# .import file) so they share the same frame size.
 # "idle" and "move" come from the moving sheet (rows 1-2 standing, rows 3-4
 # walking); "fight" is the sword-swing part of the fighting sheet.
 const SHEET_COLUMNS: int = 4
@@ -74,6 +102,16 @@ const CHARACTERS = [
 		"fighting": preload("res://assets/pawn2_fighting.png"),
 		"fight_frames": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
 	},
+	{
+		"moving": preload("res://assets/pawn3_moving.png"),
+		"fighting": preload("res://assets/pawn3_fighting.png"),
+		"fight_frames": [8, 9, 10, 11, 12, 13, 14, 15],
+	},
+	{
+		"moving": preload("res://assets/pawn4_moving.png"),
+		"fighting": preload("res://assets/pawn4_fighting.png"),
+		"fight_frames": [8, 9, 10, 11, 12, 13, 14, 15],
+	},
 ]
 const IDLE_FRAMES = [0, 1, 2, 3, 4, 5, 6, 7]
 const MOVE_FRAMES = [8, 9, 10, 11, 12, 13, 14, 15]
@@ -83,7 +121,6 @@ const SPRITE_SCALE: float = 0.9
 static var frames_cache: Dictionary = {}
 
 @export var character: int = 0 # Index into CHARACTERS; set before the pawn enters the tree
-var player_color: Color = Color.WHITE # Ring drawn under the pawn's feet
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 var pulse_tween: Tween = null
@@ -117,11 +154,6 @@ static func add_sheet_animation(frames: SpriteFrames, anim: String, sheet: Textu
 			(i / SHEET_COLUMNS) * FRAME_SIZE + FRAME_INSET,
 			FRAME_SIZE - FRAME_INSET * 2, FRAME_SIZE - FRAME_INSET * 2)
 		frames.add_frame(anim, atlas)
-
-# Colored ring under the feet shows which player owns the pawn
-func _draw():
-	draw_set_transform(Vector2(0, FRAME_SIZE * SPRITE_SCALE * 0.45), 0, Vector2(1, 0.35))
-	draw_arc(Vector2.ZERO, 110, 0, TAU, 40, player_color, 28)
 
 # Swings the weapon once (used when capturing), then returns to standing
 func play_fight():

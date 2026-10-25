@@ -59,6 +59,12 @@ const MIN_MIDDLE = 8.0
 		art_scale = value
 		_apply_art()
 
+# Moves the content down (or up, if negative) by this many pixels
+@export var content_shift: int = 0:
+	set(value):
+		content_shift = value
+		_apply_art()
+
 var _box := StyleBoxTexture.new()
 
 func _init():
@@ -77,9 +83,14 @@ func _apply_art():
 	_box.texture_margin_bottom = data.slice[3]
 
 	var layout_scale = get_art_scale()
+	var margins = []
+	for k in 4:
+		margins.append(int(round(data.content[k] * layout_scale)))
+	margins[1] += content_shift
+	margins[3] -= content_shift
 	var sides = ["margin_left", "margin_top", "margin_right", "margin_bottom"]
 	for k in sides.size():
-		add_theme_constant_override(sides[k], int(round(data.content[k] * layout_scale)))
+		add_theme_constant_override(sides[k], margins[k])
 	queue_redraw()
 
 func get_art_scale() -> float:

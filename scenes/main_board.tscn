@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://bwdmf74cdai1u"]
 
 [ext_resource type="Script" uid="uid://cgnc10rpo27ie" path="res://scripts/BoardNode.gd" id="1_ekdbr"]
-[ext_resource type="Texture2D" uid="uid://brvfypa8nfe52" path="res://assets/Board BG.jpeg" id="1_fpjay"]
 [ext_resource type="Script" uid="uid://c7etm46sg6rlo" path="res://scripts/MainBoard.gd" id="1_rymyb"]
+[ext_resource type="Texture2D" uid="uid://blrk6dah5ffsv" path="res://assets/Board BG Ultra Final.png" id="2_v8qcp"]
 [ext_resource type="Script" uid="uid://bcg2qnmvfw742" path="res://scenes/monopoly_nodes.gd" id="3_382s8"]
 [ext_resource type="PackedScene" uid="uid://dq42mro2rtvmp" path="res://scenes/dice_main.tscn" id="6_oj5fh"]
 [ext_resource type="Script" uid="uid://cakk8j6e8nyc2" path="res://scripts/DevMode.gd" id="7_devmode"]
@@ -11,6 +11,10 @@
 [ext_resource type="Texture2D" uid="uid://ckofgifyinatu" path="res://assets/BG Main UI.jpeg" id="9_xr5mr"]
 [ext_resource type="PackedScene" path="res://scenes/fire_sparks.tscn" id="10_firesparks"]
 [ext_resource type="Texture2D" uid="uid://px8yjoohdcua" path="res://assets/Board Bg (2).jpeg" id="11_pswje"]
+[ext_resource type="Script" uid="uid://bawwkdf2xxn1f" path="res://scripts/VaikunthaLotus.gd" id="12_lotus"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBox_turn_label"]
+content_margin_top = 10.0
 
 [node name="MainBoard" type="Node2D" unique_id=356345126]
 script = ExtResource("1_rymyb")
@@ -21,7 +25,7 @@ metadata/scene_file_path = "res://scenes/main_board.tscn"
 texture_filter = 2
 position = Vector2(560, 536)
 scale = Vector2(0.6, 0.6)
-texture = ExtResource("1_fpjay")
+texture = ExtResource("2_v8qcp")
 metadata/_tc_uuid = "5507380917958318684"
 metadata/_edit_lock_ = true
 
@@ -29,6 +33,17 @@ metadata/_edit_lock_ = true
 position = Vector2(560, 536)
 scale = Vector2(0.6, 0.6)
 texture = ExtResource("11_pswje")
+
+[node name="BoardBgUltraFinal" type="Sprite2D" parent="." unique_id=944427023]
+position = Vector2(560, 536)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("2_v8qcp")
+
+[node name="VaikunthaLotus" type="AnimatedSprite2D" parent="." unique_id=1928374651]
+texture_filter = 2
+position = Vector2(560, 536)
+scale = Vector2(0.89, 0.89)
+script = ExtResource("12_lotus")
 
 [node name="BoardNodes" type="Node2D" parent="." unique_id=1964501668]
 metadata/_tc_uuid = "8982612854432545144"
@@ -1532,37 +1547,37 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 25
+theme_override_font_sizes/font_size = 21
+theme_override_styles/normal = SubResource("StyleBox_turn_label")
 text = "Player 1's Turn"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="BuyPrompt" type="MarginContainer" parent="UI_Layer/UIRoot" unique_id=1840140772]
+[node name="BuyPrompt" type="MarginContainer" parent="UI_Layer/UIRoot/RightColumn" unique_id=1840140772]
 unique_name_in_owner = true
 visible = false
-layout_mode = 0
-offset_left = 1110.0
-offset_top = 566.0
-offset_right = 1890.0
-offset_bottom = 636.0
+custom_minimum_size = Vector2(0, 116)
+layout_mode = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 40
-theme_override_constants/margin_top = 18
-theme_override_constants/margin_right = 40
+theme_override_constants/margin_left = 54
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 54
 theme_override_constants/margin_bottom = 18
 script = ExtResource("9_scaledpanel")
 art = 1
+art_scale = 0.27
+content_shift = 6
 
-[node name="BuyRow" type="HBoxContainer" parent="UI_Layer/UIRoot/BuyPrompt" unique_id=1219735801]
+[node name="BuyRow" type="HBoxContainer" parent="UI_Layer/UIRoot/RightColumn/BuyPrompt" unique_id=1219735801]
 layout_mode = 2
 
-[node name="BuyScroll" type="ScrollContainer" parent="UI_Layer/UIRoot/BuyPrompt/BuyRow" unique_id=1402296318]
+[node name="BuyScroll" type="ScrollContainer" parent="UI_Layer/UIRoot/RightColumn/BuyPrompt/BuyRow" unique_id=1402296318]
 layout_mode = 2
 size_flags_horizontal = 3
 horizontal_scroll_mode = 0
 
-[node name="BuyLabel" type="Label" parent="UI_Layer/UIRoot/BuyPrompt/BuyRow/BuyScroll" unique_id=1930589067]
+[node name="BuyLabel" type="Label" parent="UI_Layer/UIRoot/RightColumn/BuyPrompt/BuyRow/BuyScroll" unique_id=1930589067]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -1571,43 +1586,42 @@ theme_override_font_sizes/font_size = 19
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="BuyButton" type="Button" parent="UI_Layer/UIRoot/BuyPrompt/BuyRow" unique_id=1707160417]
+[node name="BuyButton" type="Button" parent="UI_Layer/UIRoot/RightColumn/BuyPrompt/BuyRow" unique_id=1707160417]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
 text = "BUY"
 
-[node name="PassButton" type="Button" parent="UI_Layer/UIRoot/BuyPrompt/BuyRow" unique_id=1438113776]
+[node name="PassButton" type="Button" parent="UI_Layer/UIRoot/RightColumn/BuyPrompt/BuyRow" unique_id=1438113776]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
 text = "PASS"
 
-[node name="GatePrompt" type="MarginContainer" parent="UI_Layer/UIRoot" unique_id=428003648]
+[node name="GatePrompt" type="MarginContainer" parent="UI_Layer/UIRoot/RightColumn" unique_id=428003648]
 unique_name_in_owner = true
 visible = false
-layout_mode = 0
-offset_left = 1110.0
-offset_top = 566.0
-offset_right = 1890.0
-offset_bottom = 636.0
+custom_minimum_size = Vector2(0, 116)
+layout_mode = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 40
-theme_override_constants/margin_top = 18
-theme_override_constants/margin_right = 40
+theme_override_constants/margin_left = 54
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 54
 theme_override_constants/margin_bottom = 18
 script = ExtResource("9_scaledpanel")
 art = 1
+art_scale = 0.27
+content_shift = 6
 
-[node name="GateRow" type="HBoxContainer" parent="UI_Layer/UIRoot/GatePrompt" unique_id=1666212043]
+[node name="GateRow" type="HBoxContainer" parent="UI_Layer/UIRoot/RightColumn/GatePrompt" unique_id=1666212043]
 layout_mode = 2
 
-[node name="GateScroll" type="ScrollContainer" parent="UI_Layer/UIRoot/GatePrompt/GateRow" unique_id=1559027128]
+[node name="GateScroll" type="ScrollContainer" parent="UI_Layer/UIRoot/RightColumn/GatePrompt/GateRow" unique_id=1559027128]
 layout_mode = 2
 size_flags_horizontal = 3
 horizontal_scroll_mode = 0
 
-[node name="GateLabel" type="Label" parent="UI_Layer/UIRoot/GatePrompt/GateRow/GateScroll" unique_id=222446710]
+[node name="GateLabel" type="Label" parent="UI_Layer/UIRoot/RightColumn/GatePrompt/GateRow/GateScroll" unique_id=222446710]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -1616,43 +1630,42 @@ theme_override_font_sizes/font_size = 19
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="EnterButton" type="Button" parent="UI_Layer/UIRoot/GatePrompt/GateRow" unique_id=64291970]
+[node name="EnterButton" type="Button" parent="UI_Layer/UIRoot/RightColumn/GatePrompt/GateRow" unique_id=64291970]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
 text = "Enter Ludo board"
 
-[node name="StayButton" type="Button" parent="UI_Layer/UIRoot/GatePrompt/GateRow" unique_id=1708799730]
+[node name="StayButton" type="Button" parent="UI_Layer/UIRoot/RightColumn/GatePrompt/GateRow" unique_id=1708799730]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
 text = "Stay on outer ring"
 
-[node name="LapPrompt" type="MarginContainer" parent="UI_Layer/UIRoot" unique_id=1435169643]
+[node name="LapPrompt" type="MarginContainer" parent="UI_Layer/UIRoot/RightColumn" unique_id=1435169643]
 unique_name_in_owner = true
 visible = false
-layout_mode = 0
-offset_left = 1110.0
-offset_top = 566.0
-offset_right = 1890.0
-offset_bottom = 636.0
+custom_minimum_size = Vector2(0, 116)
+layout_mode = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 40
-theme_override_constants/margin_top = 18
-theme_override_constants/margin_right = 40
+theme_override_constants/margin_left = 54
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 54
 theme_override_constants/margin_bottom = 18
 script = ExtResource("9_scaledpanel")
 art = 1
+art_scale = 0.27
+content_shift = 6
 
-[node name="LapRow" type="HBoxContainer" parent="UI_Layer/UIRoot/LapPrompt" unique_id=1325568409]
+[node name="LapRow" type="HBoxContainer" parent="UI_Layer/UIRoot/RightColumn/LapPrompt" unique_id=1325568409]
 layout_mode = 2
 
-[node name="LapScroll" type="ScrollContainer" parent="UI_Layer/UIRoot/LapPrompt/LapRow" unique_id=1792280646]
+[node name="LapScroll" type="ScrollContainer" parent="UI_Layer/UIRoot/RightColumn/LapPrompt/LapRow" unique_id=1792280646]
 layout_mode = 2
 size_flags_horizontal = 3
 horizontal_scroll_mode = 0
 
-[node name="LapLabel" type="Label" parent="UI_Layer/UIRoot/LapPrompt/LapRow/LapScroll" unique_id=1928784958]
+[node name="LapLabel" type="Label" parent="UI_Layer/UIRoot/RightColumn/LapPrompt/LapRow/LapScroll" unique_id=1928784958]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -1661,35 +1674,34 @@ theme_override_font_sizes/font_size = 19
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="LoopButton" type="Button" parent="UI_Layer/UIRoot/LapPrompt/LapRow" unique_id=404652408]
+[node name="LoopButton" type="Button" parent="UI_Layer/UIRoot/RightColumn/LapPrompt/LapRow" unique_id=404652408]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
 text = "Loop again"
 
-[node name="ExitButton" type="Button" parent="UI_Layer/UIRoot/LapPrompt/LapRow" unique_id=578551921]
+[node name="ExitButton" type="Button" parent="UI_Layer/UIRoot/RightColumn/LapPrompt/LapRow" unique_id=578551921]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
 text = "Exit to outer ring"
 
-[node name="ShakuniPrompt" type="MarginContainer" parent="UI_Layer/UIRoot" unique_id=1150283746]
+[node name="ShakuniPrompt" type="MarginContainer" parent="UI_Layer/UIRoot/RightColumn" unique_id=1150283746]
 unique_name_in_owner = true
 visible = false
-layout_mode = 0
-offset_left = 1110.0
-offset_top = 566.0
-offset_right = 1890.0
-offset_bottom = 636.0
+custom_minimum_size = Vector2(0, 116)
+layout_mode = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 40
-theme_override_constants/margin_top = 18
-theme_override_constants/margin_right = 40
+theme_override_constants/margin_left = 54
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 54
 theme_override_constants/margin_bottom = 18
 script = ExtResource("9_scaledpanel")
 art = 1
+art_scale = 0.27
+content_shift = 6
 
-[node name="ShakuniRow" type="HBoxContainer" parent="UI_Layer/UIRoot/ShakuniPrompt" unique_id=1871166203]
+[node name="ShakuniRow" type="HBoxContainer" parent="UI_Layer/UIRoot/RightColumn/ShakuniPrompt" unique_id=1871166203]
 unique_name_in_owner = true
 layout_mode = 2
 alignment = 1

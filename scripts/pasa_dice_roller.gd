@@ -5,15 +5,15 @@ signal dice_roll_finished(rolled_number: int)
 # Both sticks showing the blank face counts as 12
 const DOUBLE_ZERO_SCORE = 12
 
-# Sticks are carried just above the dice container's rim (3.26) while dragged,
+# Sticks are carried just above the dice box's rim (2.6) while dragged,
 # and kept over its inside (inner walls at +/-4.9; a stick is 3 long)
 const HOLD_HEIGHT = 4.0
 const HOLD_LIMIT = 3.0
 const DIE_OFFSETS = [Vector3(-0.7, 0, 0), Vector3(0.7, 0, 0)]
 
 # Fixed camera for the whole game: over the centre of the container
-# (about 12 x 12 including its walls), framing the whole thing
-const OVERVIEW_CAMERA_POS = Vector3(0.0, 10.5, 3.0)
+# (about 12.6 x 12.6 including its walls), framing the whole thing
+const OVERVIEW_CAMERA_POS = Vector3(0.0, 11.5, 3.3)
 const OVERVIEW_LOOK_AT = Vector3.ZERO
 
 # Throw speed comes from the last 0.1 s of mouse movement before release
