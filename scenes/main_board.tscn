@@ -241,12 +241,12 @@ metadata/_tc_uuid = "31702617195739913"
 [node name="Node_17" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=548147071 node_paths=PackedStringArray("next_node")]
 position = Vector2(411, 132)
 script = ExtResource("1_ekdbr")
-tile_gold = 150
-tile_type = 7
 node_id = 17
+tile_type = 7
 property_name = "Swayamvara"
 purchase_cost = 0
 base_rent = 0
+tile_gold = 150
 next_node = NodePath("../Node_18")
 metadata/_tc_uuid = "31702617195739913"
 
@@ -308,8 +308,8 @@ metadata/_tc_uuid = "31702617195739913"
 [node name="Node_23" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=305094801 node_paths=PackedStringArray("next_node")]
 position = Vector2(157, 385)
 script = ExtResource("1_ekdbr")
-tile_type = 8
 node_id = 23
+tile_type = 8
 property_name = "Gandiva"
 purchase_cost = 0
 base_rent = 0
@@ -353,12 +353,12 @@ metadata/_tc_uuid = "31702617195739913"
 [node name="Node_27" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1599785065 node_paths=PackedStringArray("next_node")]
 position = Vector2(163, 689)
 script = ExtResource("1_ekdbr")
-tile_gold = 150
-tile_type = 5
 node_id = 27
+tile_type = 5
 property_name = "Kurukshetra"
 purchase_cost = 0
 base_rent = 0
+tile_gold = 150
 next_node = NodePath("../Node_28")
 metadata/_tc_uuid = "31702617195739913"
 
@@ -420,12 +420,12 @@ metadata/_tc_uuid = "31702617195739913"
 [node name="Node_33" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=2051666502 node_paths=PackedStringArray("next_node")]
 position = Vector2(411, 941)
 script = ExtResource("1_ekdbr")
-tile_gold = 200
-tile_type = 7
 node_id = 33
+tile_type = 7
 property_name = "Ashvamedha"
 purchase_cost = 0
 base_rent = 0
+tile_gold = 200
 next_node = NodePath("../Node_34")
 metadata/_tc_uuid = "31702617195739913"
 
@@ -454,12 +454,12 @@ metadata/_tc_uuid = "31702617195739913"
 [node name="Node_36" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=1797493170 node_paths=PackedStringArray("next_node")]
 position = Vector2(638, 938)
 script = ExtResource("1_ekdbr")
-tile_gold = 100
 node_id = 36
 tile_type = 7
 property_name = "Akshaya Patram"
 purchase_cost = 0
 base_rent = 0
+tile_gold = 100
 next_node = NodePath("../Node_37")
 metadata/_tc_uuid = "31702617195739913"
 
@@ -477,8 +477,8 @@ metadata/_tc_uuid = "31702617195739913"
 [node name="Node_38" type="Marker2D" parent="BoardNodes/MonopolyNodes" unique_id=681403981 node_paths=PackedStringArray("next_node")]
 position = Vector2(791, 939)
 script = ExtResource("1_ekdbr")
-tile_type = 9
 node_id = 38
+tile_type = 9
 property_name = "Agyatavasa"
 purchase_cost = 0
 base_rent = 0
@@ -1737,7 +1737,8 @@ script = ExtResource("7_devmode")
 [node name="FireSparks" parent="." unique_id=1493827160 instance=ExtResource("10_firesparks")]
 
 [node name="ThemeUi1" type="Sprite2D" parent="." unique_id=1431000743]
-z_index = -1
+z_index = -2
 position = Vector2(956.50006, 539)
 scale = Vector2(1.2056252, 1.2206047)
 texture = ExtResource("9_xr5mr")
+metadata/_edit_lock_ = true

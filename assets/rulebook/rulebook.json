@@ -1,0 +1,178 @@
+[
+	{
+		"section": "Start",
+		"title": "The Siege of Vaikuntha",
+		"lines": [
+			"A game for 2 to 4 kings, set in the world of the Mahabharata.",
+			"Each king begins with 3 pawns on Rajasuya Yajna (Start) and 1000 Gold.",
+			"Travel the outer ring, buy kingdoms, raise Forts and Palaces, and collect rent.",
+			"Enter the inner Ludo track through the gates, and capture rival pawns.",
+			"Win by bringing all 3 of your pawns to the Vaikuntha Lotus,",
+			"or by being the last king left when all others go bankrupt."
+		]
+	},
+	{
+		"section": "Start",
+		"title": "Beginning a Game",
+		"lines": [
+			"On the opening page, choose 2, 3 or 4 Players.",
+			"Press \"Begin the Siege\" for a new game, or \"Continue Saga\" to load a saved one.",
+			"Everyone plays on the same screen and takes turns.",
+			"The player panel shows each king's Gold, Kingdoms, full Sets, Kills and pawns home.",
+			"The Chronicle on the right records everything that happens."
+		]
+	},
+	{
+		"section": "Turn",
+		"title": "Taking a Turn",
+		"lines": [
+			"1. Throw the sticks: click and hold them in the dice box, swing, and let go.",
+			"2. Read your score (see the next leaf).",
+			"3. The pawns that can move start to pulse. Click one to move it.",
+			"4. Deal with the space you land on: buy, pay, draw a card, capture...",
+			"5. The turn passes to the next king.",
+			"Before throwing you may also BUILD, SELL, or SAVE the game."
+		]
+	},
+	{
+		"section": "Turn",
+		"title": "The Pasa Sticks",
+		"lines": [
+			"Each stick has four long faces marked with 0, 1, 2 or 3 dots.",
+			"Add the dots on the two faces that land on top.",
+			"If both sticks land blank (0 + 0), the score is 12.",
+			"So every throw moves 1 to 6 spaces, or 12.",
+			"If no pawn can use the score, the turn passes."
+		]
+	},
+	{
+		"section": "Ring",
+		"title": "Start and the Kingdoms",
+		"lines": [
+			"Pawns move clockwise around the outer ring of 40 spaces.",
+			"Passing or landing on Rajasuya Yajna (Start) pays you 200 Gold.",
+			"Land on an unowned kingdom: choose to Buy it or Pass.",
+			"Land on a rival's kingdom: you must pay its owner rent.",
+			"Land on your own kingdom: nothing happens."
+		]
+	},
+	{
+		"section": "Ring",
+		"title": "The Seven Kingdom Sets",
+		"lines": [
+			"Slate: Vidarbha 80, Kekaya 60, Sarasvata 60  (Fort 50)",
+			"Pink: Sauvira 120, Karusha 100, Dwarka 100  (Fort 50)",
+			"Orange: Kamakhya 160, Bahilra 160, Sourastra 140  (Fort 100)",
+			"Green: Virata 220, Kashi 200, Kuru 180  (Fort 100)",
+			"Blue: Vanga 280, Shurasena 260, Kushal 240  (Fort 150)",
+			"Crimson: Malava 340, Kalinga 320, Anga 300  (Fort 150)",
+			"Black: Gandhara 400, Kosala 360  (Fort 200)"
+		]
+	},
+	{
+		"section": "Ring",
+		"title": "Rent",
+		"lines": [
+			"Just the kingdom: its base rent.",
+			"The full colour set, no buildings: 2 x base rent.",
+			"1 Fort: 4 x     2 Forts: 10 x     3 Forts: 20 x",
+			"4 Forts: 30 x     Palace: 40 x base rent.",
+			"Owning a whole set is the key to great riches."
+		]
+	},
+	{
+		"section": "Ring",
+		"title": "Taxes, Rewards and Fate",
+		"lines": [
+			"Pay the Bank: Vana Daan 60, Yajna Dakshina 200, Rajasva Kara 200, Kurukshetra 150.",
+			"Collect from the Bank: Swayamvara 150, Ashvamedha 200, Akshaya Patram 100.",
+			"Gandiva: roll again at once.     Agyatavasa: skip your next turn.",
+			"Hall of Dice, Dwarka Haven, Kamyaka Forest and Maya Sabha are places of rest."
+		]
+	},
+	{
+		"section": "Ring",
+		"title": "Cards and Gates",
+		"lines": [
+			"Dharma draws a Dharma card: mostly blessings, Gold and tribute.",
+			"Adharma draws an Adharma card: mostly losses, but Shakuni's dice let you choose your next score.",
+			"The card flies from its deck to the centre. Click it to carry on.",
+			"Four gates stand on the ring: Magadha, Panchala, Indraprastha and Gandhara.",
+			"End a move on a gate and you may enter the Ludo track."
+		]
+	},
+	{
+		"section": "Build",
+		"title": "Forts and Palaces",
+		"lines": [
+			"Own every kingdom of a colour set to build on it.",
+			"Press BUILD on your turn, before throwing.",
+			"Raise up to 4 Forts on a kingdom; a 5th build makes a Palace.",
+			"Build evenly: every kingdom in the set must have a Fort before any gets two.",
+			"The Bank holds only 32 Forts and 12 Palaces."
+		]
+	},
+	{
+		"section": "Sell",
+		"title": "Selling and Debt",
+		"lines": [
+			"Press SELL at any time. A kingdom sells for 75% of its price,",
+			"a building for 50% of its cost. Sell buildings evenly too.",
+			"A kingdom cannot be sold while its set still has buildings.",
+			"Owe more than you hold? You must sell until you can pay.",
+			"If even everything is not enough, you are bankrupt and leave the game."
+		]
+	},
+	{
+		"section": "Ludo",
+		"title": "The Ludo Track and Vadh",
+		"lines": [
+			"Through a gate, a pawn joins the Ludo track: 72 spaces for a full lap.",
+			"Vadh: end your move on a rival's pawn to capture it.",
+			"It returns to Start without the 200 Gold, and you gain 1 Kill.",
+			"No capture on Start, on Safe Houses, or in the Home Stretch.",
+			"End a move on an arm's tip to leave the track through its gate (the lap is lost)."
+		]
+	},
+	{
+		"section": "Ludo",
+		"title": "Finishing a Lap",
+		"lines": [
+			"When a pawn completes a lap back to where it entered:",
+			"If you qualify, it turns into the Home Stretch.",
+			"If not, you gain 200 Gold and choose to loop again or leave by your gate.",
+			"To qualify you need at least 1 full colour set and at least 3 Kills."
+		]
+	},
+	{
+		"section": "Win",
+		"title": "The Home Stretch and Victory",
+		"lines": [
+			"The Home Stretch is 6 spaces leading to the Vaikuntha Lotus.",
+			"You must reach the Lotus with an exact score.",
+			"Bring all 3 of your pawns to Vaikuntha and you win the siege.",
+			"You also win if every other king goes bankrupt."
+		]
+	},
+	{
+		"section": "Tools",
+		"title": "Handy Tools",
+		"lines": [
+			"Magnifier: move it over the board to read; wheel zooms, Esc puts it away.",
+			"SAVE and LOAD work between moves. Return goes back to the opening page.",
+			"Shakuni and Narada comment on the game. Click them to send them away.",
+			"Settings let you mute or change the music volume."
+		]
+	},
+	{
+		"section": "Tips",
+		"title": "Counsel for New Kings",
+		"lines": [
+			"Buy early: Slate and Pink are cheap and quick to complete.",
+			"A full set doubles rent, allows building, and opens the road home.",
+			"Hunt for Kills: you need 3, so chase rivals on the Ludo track.",
+			"Keep some Gold in hand: taxes and Adharma cards strike without warning.",
+			"Read the Chronicle: it tells exactly what happened and who paid whom."
+		]
+	}
+]

@@ -90,6 +90,13 @@ var unsaved_changes: bool = false # Anything happened since the last save or loa
 var after_save: Callable # Runs once a save made from the "save first?" prompt succeeds
 var return_prompt_action: Callable # Leaving the board or loading another saga
 
+# Victory celebration over the board, created when someone wins
+const VICTORY_SCENE = preload("res://scenes/victory_overlay.tscn")
+var victory: VictoryOverlay
+
+# The Dharma and Adharma decks on the board, and the card-draw animation
+var card_table: CardTable
+
 # Lens for reading the board's small writing, toggled from the top bar
 var magnifier: Magnifier
 var magnifier_button: Button
@@ -114,6 +121,8 @@ func _ready():
 		player_count = GameManager.instance.selected_player_count
 	GameManager.instance.setup_players(player_count)
 	spawn_pawns()
+	card_table = CardTable.new()
+	add_child(card_table)
 	build_save_controls()
 	build_sell_panel()
 	build_build_panel()
@@ -152,6 +161,13 @@ func _ready():
 			message_scroll.scroll_vertical = int(message_scroll.get_v_scroll_bar().max_value))
 
 	build_commentary()
+	# Coming from the opening page: the game box opens before play begins
+	if GameManager.instance.play_board_intro:
+		GameManager.instance.play_board_intro = false
+		var intro = BoardIntro.new()
+		add_child(intro)
+		intro.play()
+		await intro.finished
 	if load_data.is_empty():
 		commentary.trigger(Commentary.GAME_STARTS, true)
 		begin_turn()
@@ -182,6 +198,7 @@ func build_save_controls():
 	bar.theme = ui_root.theme
 	bar.alignment = BoxContainer.ALIGNMENT_END
 	bar.add_theme_constant_override("separation", 8)
+	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE # Its empty left part overlaps the Dev Mode controls
 	bar.position = Vector2(555, 13)
 	bar.size = Vector2(450, 32)
 	layer.add_child(bar)
@@ -798,6 +815,10 @@ func count_pawns_in_vaikuntha(player_id: int) -> int:
 
 # Clicking one of the active player's pawns on the board moves it
 func _unhandled_input(event: InputEvent):
+	# DEBUG: W shows the victory overlay for the current player. Remove this block when done testing.
+	if OS.is_debug_build() and event is InputEventKey and event.pressed and not event.echo 			and event.keycode == KEY_W:
+		play_victory(GameManager.instance.active_player_index)
+		return
 	if event.is_action_pressed("ui_cancel") and magnifier_button.button_pressed:
 		magnifier_button.button_pressed = false # Esc puts the magnifier away
 		return
@@ -928,8 +949,9 @@ func resolve_landing(pawn: Pawn):
 
 		BoardNode.TileType.CARD:
 			var card = gm.draw_card(node.card_deck)
-			show_message("%s card: %s" % [node.property_name, card["text"]])
 			commentary.trigger(Commentary.DRAWS_CARD)
+			await card_table.show_card(node.card_deck, card["text"])
+			show_message("%s card: %s" % [node.property_name, card["text"]])
 			await apply_card(pawn, card, node.property_name + " card")
 
 		BoardNode.TileType.MONOPOLY:
@@ -1083,6 +1105,21 @@ func declare_winner(player_id: int, reason: String):
 	turn_label.text = "Player %d %s and WINS!" % [player_id + 1, reason]
 	refresh_players_panel()
 	commentary.trigger(Commentary.GAME_ENDS, true)
+	play_victory(player_id)
+
+# Shows the victory overlay for this player. Play Again starts a fresh game with
+# the same number of players; Quit closes the game.
+func play_victory(player_id: int):
+	if victory == null:
+		victory = VICTORY_SCENE.instantiate()
+		add_child(victory)
+		victory.play_again_pressed.connect(func():
+			GameManager.instance.selected_player_count = player_count
+			get_tree().reload_current_scene())
+		victory.quit_pressed.connect(func(): get_tree().quit())
+	magnifier_button.button_pressed = false
+	var piece = Pawn.get_character_frames(player_id % Pawn.CHARACTERS.size()).get_frame_texture("idle", 0)
+	victory.play("Player %d" % (player_id + 1), piece)
 
 func switch_turn():
 	commentary.check_fortunes()

@@ -10,6 +10,8 @@ To play, open the project in Godot 4 and press Play. After the intro video (clic
 
 # Tutorial Guide
 
+You can also read the rules inside the game: on the opening page, click the palm-leaf book icon next to the settings gear.
+
 ## 1. Starting a game
 
 1. Press **Play** in Godot. The intro video plays; click or tap anywhere to skip it.
@@ -105,7 +107,7 @@ The Bank pays you when you land here:
 - **Dharma** draws a **Dharma card**. These are mostly good: Gold, tribute from rivals, a free Fort, throwing again, or making a rival skip a turn.
 - **Adharma** draws an **Adharma card**. These are mostly bad: losing Gold, paying rivals, repair bills, being sent back to Start, skipping turns, or losing a Fort. One rare good one is **Shakuni's loaded dice**, which lets you **choose your score** on your next turn.
 
-Every card in a deck comes up once before the deck is shuffled again.
+The two decks lie on the board. When you draw, the top card flies off its deck, flips over and lands in the middle of the board with its text. Click it (or wait a few seconds) to carry on, and then the card takes effect. Every card in a deck comes up once before the deck is shuffled again.
 
 ### Gates
 There are four gates: **Gate Magadha**, **Gate Panchala**, **Gate Indraprastha** and **Gate Gandhara**. If your move **ends on a gate**, you are asked whether to **enter the Ludo board**. Say yes, and the pawn steps onto the Ludo track.

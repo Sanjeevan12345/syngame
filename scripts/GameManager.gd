@@ -13,6 +13,7 @@ var player_eliminated: Array = [false, false, false, false] # True once a player
 
 var selected_player_count: int = 0 # Set by the opening page; 0 = use MainBoard's own setting
 var pending_load: Dictionary = {} # Saved game the main board restores when it next starts
+var play_board_intro: bool = false # Set by the opening page; the board plays its intro video once
 
 var current_dice_roll: int = 0
 var is_waiting_for_input: bool = true
