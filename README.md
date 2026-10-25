@@ -1,3 +1,5 @@
+Get our game at : https://snjvn.itch.io/vikuntha-vijaya 
+
 # The Siege of Vaikuntha
 
 The Siege of Vaikuntha is a board game for 2 to 4 players, made in Godot. It mixes a property-trading game with a race game, set in the world of the Mahabharata. Each player is a king with 3 pawns and 1000 Gold. You throw two Pasa sticks to move, buy kingdoms as you travel around the outer ring, build Forts and Palaces on them, and collect rent from anyone who lands there. Passing Rajasuya Yajna (Start) earns you 200 Gold, while cards, taxes and the Hall of Dice keep things unpredictable.
