@@ -1,7 +1,10 @@
 extends Marker2D
 class_name BoardNode
 
-enum TileType { MONOPOLY, ENTRY_GATE, LUDO, SAFE_HAVEN, THRONE, TAX, CARD }
+# BONUS pays tile_gold to the player; ROLL_AGAIN gives another throw; SKIP_TURN
+# makes the player miss their next turn. New types go at the end, since scenes
+# store them by number.
+enum TileType { MONOPOLY, ENTRY_GATE, LUDO, SAFE_HAVEN, THRONE, TAX, CARD, BONUS, ROLL_AGAIN, SKIP_TURN }
 
 @export_category("Node Properties")
 @export var node_id: int = 0
@@ -15,7 +18,7 @@ enum TileType { MONOPOLY, ENTRY_GATE, LUDO, SAFE_HAVEN, THRONE, TAX, CARD }
 @export var color_set: String = "" # Kingdoms sharing a color band on the board form a set
 
 @export_category("Special Tile Data")
-@export var tile_gold: int = 0 # Gold paid when landing on a TAX tile
+@export var tile_gold: int = 0 # Gold paid on a TAX tile, or received on a BONUS tile
 @export_enum("Dharma", "Adharma") var card_deck: int = 0 # Deck drawn from on a CARD tile
 
 @export_category("Path Connections")

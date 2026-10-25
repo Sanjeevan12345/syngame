@@ -914,6 +914,18 @@ func resolve_landing(pawn: Pawn):
 			if await collect_payment(player_id, node.tile_gold, -1, node.property_name):
 				show_message("Player %d paid %d Gold at %s" % [player_id + 1, node.tile_gold, node.property_name])
 
+		BoardNode.TileType.BONUS:
+			gm.add_gold(player_id, node.tile_gold)
+			show_message("Player %d collected %d Gold at %s" % [player_id + 1, node.tile_gold, node.property_name])
+
+		BoardNode.TileType.ROLL_AGAIN:
+			extra_turn_pending = true
+			show_message("Player %d landed on %s: roll again" % [player_id + 1, node.property_name])
+
+		BoardNode.TileType.SKIP_TURN:
+			gm.player_skip_turns[player_id] += 1
+			show_message("Player %d landed on %s and will skip their next turn" % [player_id + 1, node.property_name])
+
 		BoardNode.TileType.CARD:
 			var card = gm.draw_card(node.card_deck)
 			show_message("%s card: %s" % [node.property_name, card["text"]])
